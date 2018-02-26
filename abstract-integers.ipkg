@@ -1,0 +1,11 @@
+package verified
+
+pkgs = contrib
+
+modules =
+  Util.Common,
+  Util.Laws,
+  PrimitiveInteger.Ring,
+  PrimitiveInteger.Trusted,
+  AbstractInteger.Interfaces,
+  AbstractInteger.Theory
