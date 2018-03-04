@@ -19,6 +19,11 @@ postulate primPlusAssociative : Law.associative Trusted.primPlus
 postulate primPlusCommutative : Law.commutative Trusted.primPlus
 postulate primZeroL : Law.neutralL Trusted.primPlus 0
 postulate primNegationL : Law.inverseL Trusted.primPlus 0 negate
+postulate primOrderReflexive : Law.reflexive PrimLTE
+postulate primOrderTransitive : Law.transitive PrimLTE
+postulate primOrderAntisymmetric : Law.antisymmetric PrimLTE
+postulate primTranslateOrderL : Law.translateOrderL Trusted.primPlus PrimLTE
+
 
 public export
 implementation AdditiveGroup Integer where
@@ -30,11 +35,6 @@ implementation AdditiveGroup Integer where
     plusNeutralL = primZeroL
     plusInverseL = primNegationL
 
-
-postulate primOrderReflexive : Law.reflexive PrimLTE
-postulate primOrderTransitive : Law.transitive PrimLTE
-postulate primOrderAntisymmetric : Law.antisymmetric PrimLTE
-
 public export 
 implementation Preorder Integer PrimLTE where
     reflexive = primOrderReflexive
@@ -43,9 +43,6 @@ implementation Preorder Integer PrimLTE where
 public export 
 implementation Poset Integer PrimLTE where
     antisymmetric = primOrderAntisymmetric
-
-postulate primTranslateOrderL : 
-    Law.translateOrderL Trusted.primPlus PrimLTE
 
 public export 
 implementation PartiallyOrderdAdditiveGroup Integer PrimLTE where  
