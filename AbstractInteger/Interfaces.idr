@@ -21,18 +21,18 @@ interface AdditiveGroup s where
     plusNeutralR = Law.commuteNeutralL add zero plusCommutative plusNeutralL
     plusInverseR = Law.commuteInverseL add zero neg plusCommutative plusInverseL
 
-export
-commuteAdditiveGroupOrderL : AdditiveGroup s => (rel : Rel s) -> 
-   Law.translationInvariantOrderL Interfaces.add rel ->
-   Law.translationInvariantOrderR Interfaces.add rel
-commuteAdditiveGroupOrderL rel left = 
-   Law.commuteTranslationInvariantOrderL Interfaces.add rel plusCommutative left
-
 
 public export
 interface (AdditiveGroup s, Poset s rel) =>
     PartiallyOrderdAdditiveGroup s (rel : s -> s -> Type)
-where
-    translationInvariantOrderL : Law.translationInvariantOrderL Interfaces.add rel
-    translationInvariantOrderR : Law.translationInvariantOrderR Interfaces.add rel
+  where
+    translateOrderL : Law.translateOrderL Interfaces.add rel
+    translateOrderR : Law.translateOrderR Interfaces.add rel
 
+
+export
+commuteAdditiveGroupOrderL : AdditiveGroup s => (rel : Rel s) -> 
+    Law.translateOrderL Interfaces.add rel ->
+    Law.translateOrderR Interfaces.add rel
+commuteAdditiveGroupOrderL rel left = 
+    Law.commuteTranslateOrderL Interfaces.add rel plusCommutative left

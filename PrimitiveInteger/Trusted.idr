@@ -11,8 +11,8 @@ primPlus : Binop Integer
 primPlus = prim__addBigInt
 
 export
-data PrimitiveLTE : Integer -> Integer -> Type where
-    CheckLTE : So (a <= b) -> PrimitiveLTE a b
+data PrimLTE : Integer -> Integer -> Type where
+    CheckLTE : So (a <= b) -> PrimLTE a b
 
 
 postulate primPlusAssociative : Law.associative Trusted.primPlus
@@ -31,24 +31,23 @@ implementation AdditiveGroup Integer where
     plusInverseL = primNegationL
 
 
-postulate primOrderReflexive : Law.reflexive PrimitiveLTE
-postulate primOrderTransitive : Law.transitive PrimitiveLTE
-postulate primOrderAntisymmetric : Law.antisymmetric PrimitiveLTE
+postulate primOrderReflexive : Law.reflexive PrimLTE
+postulate primOrderTransitive : Law.transitive PrimLTE
+postulate primOrderAntisymmetric : Law.antisymmetric PrimLTE
 
 public export 
-implementation Preorder Integer PrimitiveLTE where
+implementation Preorder Integer PrimLTE where
     reflexive = primOrderReflexive
     transitive = primOrderTransitive
 
 public export 
-implementation Poset Integer PrimitiveLTE where
+implementation Poset Integer PrimLTE where
     antisymmetric = primOrderAntisymmetric
 
-postulate primTranslationInvariantOrderL : 
-    Law.translationInvariantOrderL Trusted.primPlus PrimitiveLTE
+postulate primTranslateOrderL : 
+    Law.translateOrderL Trusted.primPlus PrimLTE
 
 public export 
-implementation PartiallyOrderdAdditiveGroup Integer PrimitiveLTE where  
-    translationInvariantOrderL = primTranslationInvariantOrderL
-    translationInvariantOrderR = commuteAdditiveGroupOrderL
-        PrimitiveLTE primTranslationInvariantOrderL
+implementation PartiallyOrderdAdditiveGroup Integer PrimLTE where  
+    translateOrderL = primTranslateOrderL
+    translateOrderR = commuteAdditiveGroupOrderL PrimLTE primTranslateOrderL

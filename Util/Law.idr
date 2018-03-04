@@ -44,17 +44,15 @@ transitive rel = (x,y,z : _) -> rel x y -> rel y z -> rel x z
 antisymmetric : Rel s -> Type
 antisymmetric rel = (x,y : _) -> rel x y -> rel y x -> x = y
 
-translationInvariantOrderL : Binop s -> Rel s -> Type
-translationInvariantOrderL (#) (<) = (x,y,a : _) -> x < y -> a # x < a # y
+translateOrderL : Binop s -> Rel s -> Type
+translateOrderL (#) (<) = (x,y,a : _) -> x < y -> a # x < a # y
 
-translationInvariantOrderR : Binop s -> Rel s -> Type
-translationInvariantOrderR (#) (<) = (x,y,a : _) -> x < y -> x # a < y # a
+translateOrderR : Binop s -> Rel s -> Type
+translateOrderR (#) (<) = (x,y,a : _) -> x < y -> x # a < y # a
 
 
-commuteTranslationInvariantOrderL : (op : Binop s) -> (rel : Rel s) ->
-    commutative op -> 
-    translationInvariantOrderL op rel -> 
-    translationInvariantOrderR op rel
-commuteTranslationInvariantOrderL op rel commute left x y a = 
+commuteTranslateOrderL : (op : Binop s) -> (rel : Rel s) ->
+    commutative op -> translateOrderL op rel -> translateOrderR op rel
+commuteTranslateOrderL op rel commute left x y a = 
     rewrite commute x a in
     rewrite commute y a in left x y a
