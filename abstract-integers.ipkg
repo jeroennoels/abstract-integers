@@ -4,8 +4,8 @@ pkgs = contrib
 
 modules =
   Util.Common,
-  Util.Laws,
-  PrimitiveInteger.Ring,
+  Util.Law,
   PrimitiveInteger.Trusted,
   AbstractInteger.Interfaces,
-  AbstractInteger.Theory
+  AbstractInteger.Theory,
+  Test
