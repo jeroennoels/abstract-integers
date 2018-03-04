@@ -30,17 +30,9 @@ commuteNeutralL : (op : Binop s) -> (e : s) ->
     commutative op -> neutralL op e -> neutralR op e
 commuteNeutralL op e comm left x = comm x e `trans` left x
 
-commuteNeutralR : (op : Binop s) -> (e : s) ->
-    commutative op -> neutralR op e -> neutralL op e
-commuteNeutralR op e comm right x = comm e x `trans` right x
-
 commuteInverseL : (op : Binop s) -> (e : s) -> (inv : s -> s) ->
     commutative op -> inverseL op e inv -> inverseR op e inv
 commuteInverseL op e inv comm left x = comm x (inv x) `trans` left x
-
-commuteInverseR : (op : Binop s) -> (e : s) -> (inv : s -> s) ->
-    commutative op -> inverseR op e inv -> inverseL op e inv
-commuteInverseR op e inv comm right x = comm (inv x) x `trans` right x
 
 
 reflexive : Rel s -> Type
@@ -57,3 +49,12 @@ translationInvariantOrderL (#) (<) = (x,y,a : _) -> x < y -> a # x < a # y
 
 translationInvariantOrderR : Binop s -> Rel s -> Type
 translationInvariantOrderR (#) (<) = (x,y,a : _) -> x < y -> x # a < y # a
+
+
+commuteTranslationInvariantOrderL : (op : Binop s) -> (rel : Rel s) ->
+    commutative op -> 
+    translationInvariantOrderL op rel -> 
+    translationInvariantOrderR op rel
+commuteTranslationInvariantOrderL op rel commute left x y a = 
+    rewrite commute x a in
+    rewrite commute y a in left x y a
