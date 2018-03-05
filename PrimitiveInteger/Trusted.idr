@@ -27,7 +27,7 @@ postulate primTranslateOrderL : Law.translateOrderL Trusted.primPlus PrimLTE
 
 public export
 implementation AdditiveGroup Integer where
-    add = prim__addBigInt
+    (|+|) = prim__addBigInt
     zero = 0
     neg = prim__subBigInt 0
     plusAssociative = primPlusAssociative
@@ -35,16 +35,16 @@ implementation AdditiveGroup Integer where
     plusNeutralL = primZeroL
     plusInverseL = primNegationL
 
-public export 
+public export
 implementation Preorder Integer PrimLTE where
     reflexive = primOrderReflexive
     transitive = primOrderTransitive
 
-public export 
+public export
 implementation Poset Integer PrimLTE where
     antisymmetric = primOrderAntisymmetric
 
-public export 
-implementation PartiallyOrderdAdditiveGroup Integer PrimLTE where  
+public export
+implementation PartiallyOrderdAdditiveGroup Integer PrimLTE where
     translateOrderL = primTranslateOrderL
     translateOrderR = commuteAdditiveGroupOrderL PrimLTE primTranslateOrderL

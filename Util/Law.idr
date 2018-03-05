@@ -53,6 +53,6 @@ translateOrderR (#) (<) = (x,y,a : _) -> x < y -> x # a < y # a
 
 commuteTranslateOrderL : (op : Binop s) -> (rel : Rel s) ->
     commutative op -> translateOrderL op rel -> translateOrderR op rel
-commuteTranslateOrderL op rel commute left x y a = 
+commuteTranslateOrderL op rel commute left x y a =
     rewrite commute x a in
     rewrite commute y a in left x y a
