@@ -3,5 +3,9 @@ module Test
 import AbstractInteger.Theory
 import PrimitiveInteger.Trusted
 
-test : Integer
-test = neg (5 |+| zero) 
+abstractFoo : AdditiveGroup s => s -> s
+abstractFoo x = neg x |+| x |+| zero
+
+foo : Integer -> Integer
+foo x = abstractFoo x
+

@@ -15,14 +15,14 @@ data PrimLTE : Integer -> Integer -> Type where
     CheckLTE : So (a <= b) -> PrimLTE a b
 
 
-postulate primPlusAssociative : Law.associative Trusted.primPlus
-postulate primPlusCommutative : Law.commutative Trusted.primPlus
-postulate primZeroL : Law.neutralL Trusted.primPlus 0
-postulate primNegationL : Law.inverseL Trusted.primPlus 0 negate
-postulate primOrderReflexive : Law.reflexive PrimLTE
-postulate primOrderTransitive : Law.transitive PrimLTE
-postulate primOrderAntisymmetric : Law.antisymmetric PrimLTE
-postulate primTranslateOrderL : Law.translateOrderL Trusted.primPlus PrimLTE
+postulate primPlusAssociative : isAssociative Trusted.primPlus
+postulate primPlusCommutative : isCommutative Trusted.primPlus
+postulate primZeroL : isNeutralL Trusted.primPlus 0
+postulate primNegationL : isInverseL Trusted.primPlus 0 negate
+postulate primOrderReflexive : isReflexive PrimLTE
+postulate primOrderTransitive : isTransitive PrimLTE
+postulate primOrderAntisymmetric : isAntisymmetric PrimLTE
+postulate primTranslateOrderL : isTranslationInvariantL Trusted.primPlus PrimLTE
 
 
 public export
@@ -45,6 +45,6 @@ implementation Poset Integer PrimLTE where
     antisymmetric = primOrderAntisymmetric
 
 public export
-implementation PartiallyOrderdAdditiveGroup Integer PrimLTE where
+implementation PartiallyOrderedAdditiveGroup Integer PrimLTE where
     translateOrderL = primTranslateOrderL
     translateOrderR = commuteAdditiveGroupOrderL PrimLTE primTranslateOrderL

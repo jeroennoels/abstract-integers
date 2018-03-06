@@ -1,8 +1,8 @@
 module AbstractInteger.Interfaces
 
-import Util.Common
-import Util.Law
-import Decidable.Order
+import public Util.Common
+import public Util.Law
+import public Decidable.Order
 
 %default total
 
@@ -13,28 +13,28 @@ interface AdditiveGroup s where
     (|+|) : Binop s
     zero : s
     neg : s -> s
-    plusAssociative : Law.associative (|+|)
-    plusCommutative : Law.commutative (|+|)
-    plusNeutralL : Law.neutralL (|+|) zero
-    plusNeutralR : Law.neutralR (|+|) zero
-    plusInverseL : Law.inverseL (|+|) zero neg
-    plusInverseR : Law.inverseR (|+|) zero neg
+    plusAssociative : isAssociative (|+|)
+    plusCommutative : isCommutative (|+|)
+    plusNeutralL : isNeutralL (|+|) zero
+    plusNeutralR : isNeutralR (|+|) zero
+    plusInverseL : isInverseL (|+|) zero neg
+    plusInverseR : isInverseR (|+|) zero neg
 
-    plusNeutralR = Law.commuteNeutralL (|+|) zero plusCommutative plusNeutralL
-    plusInverseR = Law.commuteInverseL (|+|) zero neg plusCommutative plusInverseL
-
-
-public export
-interface (AdditiveGroup s, Poset s rel) =>
-    PartiallyOrderdAdditiveGroup s (rel : s -> s -> Type)
-  where
-    translateOrderL : Law.translateOrderL (|+|) rel
-    translateOrderR : Law.translateOrderR (|+|) rel
+    plusNeutralR = commuteNeutralL (|+|) zero plusCommutative plusNeutralL
+    plusInverseR = commuteInverseL (|+|) zero neg plusCommutative plusInverseL
 
 
 export
 commuteAdditiveGroupOrderL : AdditiveGroup s => (rel : Rel s) ->
-    Law.translateOrderL (|+|) rel ->
-    Law.translateOrderR (|+|) rel
+    isTranslationInvariantL (|+|) rel ->
+    isTranslationInvariantR (|+|) rel
 commuteAdditiveGroupOrderL rel left =
-    Law.commuteTranslateOrderL (|+|) rel plusCommutative left
+    commuteTranslationInvariantL (|+|) rel plusCommutative left
+
+
+public export
+interface (AdditiveGroup s, Poset s rel) =>
+    PartiallyOrderedAdditiveGroup s (rel : Rel s)
+  where
+    translateOrderL : isTranslationInvariantL {s} (|+|) rel
+    translateOrderR : isTranslationInvariantR {s} (|+|) rel
