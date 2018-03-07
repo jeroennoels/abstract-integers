@@ -13,28 +13,20 @@ interface AdditiveGroup s where
     (|+|) : Binop s
     zero : s
     neg : s -> s
-    plusAssociative : isAssociative (|+|)
-    plusCommutative : isCommutative (|+|)
+    plusAssoc : isAssociative (|+|)
+    plusCommutes : isCommutative (|+|)
     plusNeutralL : isNeutralL (|+|) zero
     plusNeutralR : isNeutralR (|+|) zero
     plusInverseL : isInverseL (|+|) zero neg
     plusInverseR : isInverseR (|+|) zero neg
 
-    plusNeutralR = commuteNeutralL (|+|) zero plusCommutative plusNeutralL
-    plusInverseR = commuteInverseL (|+|) zero neg plusCommutative plusInverseL
-
-
-export
-commuteAdditiveGroupOrderL : AdditiveGroup s => (rel : Rel s) ->
-    isTranslationInvariantL (|+|) rel ->
-    isTranslationInvariantR (|+|) rel
-commuteAdditiveGroupOrderL rel left =
-    commuteTranslationInvariantL (|+|) rel plusCommutative left
+    plusNeutralR = commuteNeutralL (|+|) zero plusCommutes plusNeutralL
+    plusInverseR = commuteInverseL (|+|) zero neg plusCommutes plusInverseL
 
 
 public export
 interface (AdditiveGroup s, Poset s rel) =>
     PartiallyOrderedAdditiveGroup s (rel : Rel s)
   where
-    translateOrderL : isTranslationInvariantL {s} (|+|) rel
-    translateOrderR : isTranslationInvariantR {s} (|+|) rel
+    translateOrderL : isTranslationInvariantL (|+|) rel
+    translateOrderR : isTranslationInvariantR (|+|) rel

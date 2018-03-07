@@ -7,22 +7,23 @@ import Decidable.Order
 
 %default total
 
-primPlus : Binop Integer
-primPlus = prim__addBigInt
+||| Synonym to avoid implicit binding in types.
+AddBigInt : Binop Integer
+AddBigInt = prim__addBigInt
 
 export
 data PrimLTE : Integer -> Integer -> Type where
     CheckLTE : So (a <= b) -> PrimLTE a b
 
 
-postulate primPlusAssociative : isAssociative Trusted.primPlus
-postulate primPlusCommutative : isCommutative Trusted.primPlus
-postulate primZeroL : isNeutralL Trusted.primPlus 0
-postulate primNegationL : isInverseL Trusted.primPlus 0 negate
+postulate primPlusAssociative : isAssociative AddBigInt
+postulate primPlusCommutative : isCommutative AddBigInt
+postulate primZeroL : isNeutralL AddBigInt 0
+postulate primNegationL : isInverseL AddBigInt 0 negate
 postulate primOrderReflexive : isReflexive PrimLTE
 postulate primOrderTransitive : isTransitive PrimLTE
 postulate primOrderAntisymmetric : isAntisymmetric PrimLTE
-postulate primTranslateOrderL : isTranslationInvariantL Trusted.primPlus PrimLTE
+postulate primTranslateOrderL : isTranslationInvariantL AddBigInt PrimLTE
 
 
 public export
@@ -30,8 +31,8 @@ implementation AdditiveGroup Integer where
     (|+|) = prim__addBigInt
     zero = 0
     neg = prim__subBigInt 0
-    plusAssociative = primPlusAssociative
-    plusCommutative = primPlusCommutative
+    plusAssoc = primPlusAssociative
+    plusCommutes = primPlusCommutative
     plusNeutralL = primZeroL
     plusInverseL = primNegationL
 
@@ -47,4 +48,6 @@ implementation Poset Integer PrimLTE where
 public export
 implementation PartiallyOrderedAdditiveGroup Integer PrimLTE where
     translateOrderL = primTranslateOrderL
-    translateOrderR = commuteAdditiveGroupOrderL PrimLTE primTranslateOrderL
+    translateOrderR = commuteTranslationInvariantL 
+        AddBigInt PrimLTE plusCommutes primTranslateOrderL
+
