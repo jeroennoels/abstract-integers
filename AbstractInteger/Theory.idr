@@ -5,18 +5,42 @@ import public Util.Common
 
 %default total
 
-plusPreservesOrder : PartiallyOrderedAdditiveGroup g po => (a,b,c,d : g) ->
-    po a b -> po c d -> a |+| c `po` b |+| d
+export
+plusPreservesOrder : PartiallyOrderedAdditiveGroup s rel => (a,b,c,d : s) ->
+    rel a b -> rel c d -> rel (a |+| c) (b |+| d)
 plusPreservesOrder a b c d ab cd =
   let pp = translateOrderR a b c ab
       qq = translateOrderL c d b cd
   in transitive (a |+| c) _ _ pp qq
 
-
-plusOnIntervals : PartiallyOrderedAdditiveGroup g po => 
-    Interval po a b -> Interval po c d -> 
-    Interval po (a |+| c) (b |+| d)
-plusOnIntervals (Between x ax xb) (Between y cy yd) = let 
+export
+plusOnIntervals : PartiallyOrderedAdditiveGroup s rel =>
+    Interval rel a b -> Interval rel c d ->
+    Interval rel (a |+| c) (b |+| d)
+plusOnIntervals (Between x ax xb) (Between y cy yd) = let
     pp = plusPreservesOrder _ x _ y ax cy
     qq = plusPreservesOrder x _ y _ xb yd
     in Between (x |+| y) pp qq
+
+public export
+SymRange : PartiallyOrderedAdditiveGroup s rel => (u : s) -> Type
+SymRange {rel} u = Interval rel (neg u) u
+
+export
+inSymRange : PartiallyOrderedAdditiveGroup s rel => (a : s) -> (u : s) -> 
+    Maybe (SymRange {rel} u)
+inSymRange a u = let 
+    lower = maybeOrdered (neg u) a
+    upper = maybeOrdered a u
+    in liftA2 (Between a) lower upper
+
+
+postulate lemma : AdditiveGroup s => (a,b : s) -> 
+    neg (a |+| b) = neg a |+| neg b
+
+export
+addInRange : PartiallyOrderedAdditiveGroup s rel => {u : s} ->
+    SymRange {rel} u -> SymRange {rel} u -> SymRange {rel} (u |+| u)
+addInRange {u} = rewrite lemma u u in plusOnIntervals
+
+

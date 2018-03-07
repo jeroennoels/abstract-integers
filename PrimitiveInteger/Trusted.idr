@@ -15,6 +15,11 @@ export
 data PrimLTE : Integer -> Integer -> Type where
     CheckLTE : So (a <= b) -> PrimLTE a b
 
+primLTE : (a,b : Integer) -> Maybe (PrimLTE a b)
+primLTE a b = case choose (a <= b) of
+    Left oh => Just (CheckLTE oh)
+    Right _ => Nothing
+
 
 postulate primPlusAssociative : isAssociative AddBigInt
 postulate primPlusCommutative : isCommutative AddBigInt
@@ -50,4 +55,5 @@ implementation PartiallyOrderedAdditiveGroup Integer PrimLTE where
     translateOrderL = primTranslateOrderL
     translateOrderR = commuteTranslationInvariantL 
         AddBigInt PrimLTE plusCommutes primTranslateOrderL
+    maybeOrdered = primLTE
 

@@ -12,4 +12,4 @@ modules =
 
 main = Test
 
-opts = "--warnreach"
+opts = "--warnreach -S"

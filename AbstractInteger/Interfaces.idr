@@ -29,4 +29,5 @@ interface (AdditiveGroup s, Poset s rel) =>
     PartiallyOrderedAdditiveGroup s (rel : Rel s)
   where
     translateOrderL : isTranslationInvariantL (|+|) rel
-    translateOrderR : isTranslationInvariantR (|+|) rel
+    translateOrderR : isTranslationInvariantR (|+|) rel    
+    maybeOrdered : (a,b : s) -> Maybe (rel a b) 
