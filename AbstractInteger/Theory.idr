@@ -1,6 +1,7 @@
 module AbstractInteger.Theory
 
 import public AbstractInteger.Interfaces
+import public Util.Common
 
 %default total
 
@@ -11,3 +12,11 @@ plusPreservesOrder a b c d ab cd =
       qq = translateOrderL c d b cd
   in transitive (a |+| c) _ _ pp qq
 
+
+plusOnIntervals : PartiallyOrderedAdditiveGroup g po => 
+    Interval po a b -> Interval po c d -> 
+    Interval po (a |+| c) (b |+| d)
+plusOnIntervals (Between x ax xb) (Between y cy yd) = let 
+    pp = plusPreservesOrder _ x _ y ax cy
+    qq = plusPreservesOrder x _ y _ xb yd
+    in Between (x |+| y) pp qq

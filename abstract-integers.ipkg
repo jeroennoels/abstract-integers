@@ -9,3 +9,7 @@ modules =
   AbstractInteger.Interfaces,
   AbstractInteger.Theory,
   Test
+
+main = Test
+
+opts = "--warnreach"
