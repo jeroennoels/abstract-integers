@@ -1,4 +1,4 @@
-module Test
+module Main
 
 import AbstractInteger.Theory
 import PrimitiveInteger.Trusted
@@ -7,7 +7,7 @@ abstractFoo : AdditiveGroup s => s -> s
 abstractFoo x = neg x |+| x |+| zero |+| x
 
 foo : Integer -> Integer
-foo x = abstractFoo x 
+foo x = abstractFoo x
 
 test : SymRange {rel = PrimLTE} 100 -> Integer
 test x = fromInterval (addInRange x x)

@@ -23,24 +23,22 @@ plusOnIntervals (Between x ax xb) (Between y cy yd) = let
     in Between (x |+| y) pp qq
 
 public export
-SymRange : PartiallyOrderedAdditiveGroup s rel => (u : s) -> Type
+SymRange : PartiallyOrderedAdditiveGroup s rel => .(u : s) -> Type
 SymRange {rel} u = Interval rel (neg u) u
 
 export
-inSymRange : PartiallyOrderedAdditiveGroup s rel => (a : s) -> (u : s) -> 
+inSymRange : PartiallyOrderedAdditiveGroup s rel => (a : s) -> (u : s) ->
     Maybe (SymRange {rel} u)
-inSymRange a u = let 
+inSymRange a u = let
     lower = maybeOrdered (neg u) a
     upper = maybeOrdered a u
     in liftA2 (Between a) lower upper
 
 
-postulate lemma : AdditiveGroup s => (a,b : s) -> 
+postulate lemma : AdditiveGroup s => (a,b : s) ->
     neg (a |+| b) = neg a |+| neg b
 
 export
-addInRange : PartiallyOrderedAdditiveGroup s rel => {u : s} ->
+addInRange : PartiallyOrderedAdditiveGroup s rel => .{u : s} ->
     SymRange {rel} u -> SymRange {rel} u -> SymRange {rel} (u |+| u)
 addInRange {u} = rewrite lemma u u in plusOnIntervals
-
-

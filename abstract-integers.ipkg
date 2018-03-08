@@ -2,6 +2,8 @@ package verified
 
 pkgs = contrib
 
+opts = "--warnreach"
+
 modules =
   Util.Common,
   Util.Law,
@@ -9,7 +11,8 @@ modules =
   AbstractInteger.Interfaces,
   AbstractInteger.Theory,
   Test
+  
+executable = main
+main = Main
 
-main = Test
 
-opts = "--warnreach -S"
