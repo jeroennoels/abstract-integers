@@ -6,8 +6,8 @@ import public Util.Common
 %default total
 
 export
-plusPreservesOrder : PartiallyOrderedAdditiveGroup s rel => (a,b,c,d : s) ->
-    rel a b -> rel c d -> rel (a |+| c) (b |+| d)
+plusPreservesOrder : PartiallyOrderedAdditiveGroup s rel => .(a,b,c,d : s) ->
+    .rel a b -> .rel c d -> rel (a |+| c) (b |+| d)
 plusPreservesOrder a b c d ab cd =
   let pp = translateOrderR a b c ab
       qq = translateOrderL c d b cd
@@ -34,7 +34,7 @@ inSymRange a u = let
     upper = maybeOrdered a u
     in liftA2 (Between a) lower upper
 
-
+||| todo
 postulate lemma : AdditiveGroup s => (a,b : s) ->
     neg (a |+| b) = neg a |+| neg b
 
