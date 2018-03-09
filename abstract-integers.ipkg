@@ -8,11 +8,11 @@ modules =
   Util.Common,
   Util.Law,
   PrimitiveInteger.Trusted,
+  AbstractInteger.Lemma,
   AbstractInteger.Interfaces,
   AbstractInteger.Theory,
   Test
-  
-executable = main
+
+executable = runAbstractIntegers
+
 main = Main
-
-

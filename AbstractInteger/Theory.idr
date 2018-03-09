@@ -1,7 +1,9 @@
 module AbstractInteger.Theory
 
-import public AbstractInteger.Interfaces
 import public Util.Common
+import public AbstractInteger.Interfaces
+import AbstractInteger.Lemma
+
 
 %default total
 
@@ -34,11 +36,7 @@ inSymRange a u = let
     upper = maybeOrdered a u
     in liftA2 (Between a) lower upper
 
-||| todo
-postulate lemma : AdditiveGroup s => (a,b : s) ->
-    neg (a |+| b) = neg a |+| neg b
-
 export
 addInRange : PartiallyOrderedAdditiveGroup s rel => .{u : s} ->
     SymRange {rel} u -> SymRange {rel} u -> SymRange {rel} (u |+| u)
-addInRange {u} = rewrite lemma u u in plusOnIntervals
+addInRange {u} = rewrite negatePlus u u in plusOnIntervals
