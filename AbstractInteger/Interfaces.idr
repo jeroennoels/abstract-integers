@@ -11,17 +11,17 @@ infixl 8 |+|
 public export
 interface AdditiveGroup s where
     (|+|) : Binop s
-    zero : s
+    Zero : s
     neg : s -> s
     plusAssoc : isAssociative (|+|)
     plusCommutes : isCommutative (|+|)
-    plusNeutralL : isNeutralL (|+|) zero
-    plusNeutralR : isNeutralR (|+|) zero
-    plusInverseL : isInverseL (|+|) zero neg
-    plusInverseR : isInverseR (|+|) zero neg
+    plusNeutralL : isNeutralL (|+|) Zero
+    plusNeutralR : isNeutralR (|+|) Zero
+    plusInverseL : isInverseL (|+|) Zero neg
+    plusInverseR : isInverseR (|+|) Zero neg
 
-    plusNeutralR = commuteNeutralL (|+|) zero plusCommutes plusNeutralL
-    plusInverseR = commuteInverseL (|+|) zero neg plusCommutes plusInverseL
+    plusNeutralR = commuteNeutralL (|+|) Zero plusCommutes plusNeutralL
+    plusInverseR = commuteInverseL (|+|) Zero neg plusCommutes plusInverseL
 
 
 public export

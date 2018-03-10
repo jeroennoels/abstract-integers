@@ -34,7 +34,7 @@ postulate primTranslateOrderL : isTranslationInvariantL AddBigInt PrimLTE
 public export
 implementation AdditiveGroup Integer where
     (|+|) = prim__addBigInt
-    zero = 0
+    Zero = 0
     neg = prim__subBigInt 0
     plusAssoc = primPlusAssociative
     plusCommutes = primPlusCommutative
