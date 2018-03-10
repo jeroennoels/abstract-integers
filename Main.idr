@@ -4,7 +4,7 @@ import AbstractInteger.Theory
 import PrimitiveInteger.Trusted
 
 abstractFoo : AdditiveGroup s => s -> s
-abstractFoo x = neg x |+| x |+| zero |+| x |+| x
+abstractFoo x = neg x |+| x |+| Zero |+| x |+| x
 
 foo : Integer -> Integer
 foo x = abstractFoo x  -- eta reduction leads to different runtime
