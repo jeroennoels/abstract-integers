@@ -4,10 +4,9 @@ import public Util.Common
 import public AbstractInteger.Interfaces
 import AbstractInteger.Lemma
 
-
+%access export
 %default total
 
-export
 plusPreservesOrder : PartiallyOrderedAdditiveGroup s rel => .(a,b,c,d : s) ->
     .rel a b -> .rel c d -> rel (a |+| c) (b |+| d)
 plusPreservesOrder a b c d ab cd =
@@ -15,7 +14,7 @@ plusPreservesOrder a b c d ab cd =
       qq = translateOrderL c d b cd
   in transitive (a |+| c) _ _ pp qq
 
-export
+
 plusOnIntervals : PartiallyOrderedAdditiveGroup s rel =>
     Interval rel a b -> Interval rel c d ->
     Interval rel (a |+| c) (b |+| d)
@@ -28,7 +27,7 @@ public export
 SymRange : PartiallyOrderedAdditiveGroup s rel => .(u : s) -> Type
 SymRange {rel} u = Interval rel (neg u) u
 
-export
+
 inSymRange : PartiallyOrderedAdditiveGroup s rel => (a : s) -> (u : s) ->
     Maybe (SymRange {rel} u)
 inSymRange a u = let
@@ -36,7 +35,8 @@ inSymRange a u = let
     upper = maybeOrdered a u
     in liftA2 (Between a) lower upper
 
-export
+
 addInRange : PartiallyOrderedAdditiveGroup s rel => .{u : s} ->
     SymRange {rel} u -> SymRange {rel} u -> SymRange {rel} (u |+| u)
 addInRange {u} = rewrite negatePlus u u in plusOnIntervals
+ 
