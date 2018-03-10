@@ -36,7 +36,7 @@ inSymRange a u = let
     in liftA2 (Between a) lower upper
 
 
-addInRange : PartiallyOrderedAdditiveGroup s rel => .{u : s} ->
-    SymRange {rel} u -> SymRange {rel} u -> SymRange {rel} (u |+| u)
-addInRange {u} = rewrite negatePlus u u in plusOnIntervals
- 
+addInRange : PartiallyOrderedAdditiveGroup s rel => .{u,v : s} ->
+    SymRange {rel} u -> SymRange {rel} v -> SymRange {rel} (u |+| v)
+addInRange {u} {v} = rewrite negatePlusAbelian u v in plusOnIntervals
+

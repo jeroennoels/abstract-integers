@@ -62,3 +62,9 @@ negatePlus a b = let
         ((a |+| b) |+| (neg b |+| neg a) = Zero)
         (sym (plusAssoc a b _) `trans` (o5 `trans` plusInverseR a))
     in uniqueInverse _ _ o6
+
+
+negatePlusAbelian : AdditiveGroup s => .(a,b : s) ->
+    neg (a |+| b) = neg a |+| neg b
+negatePlusAbelian a b = 
+    cong {f = neg} (plusCommutes a b) `trans` negatePlus b a
