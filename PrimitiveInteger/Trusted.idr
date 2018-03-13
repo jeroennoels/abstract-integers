@@ -57,3 +57,15 @@ implementation PartiallyOrderedAdditiveGroup Integer PrimLTE where
         AddBigInt PrimLTE plusCommutes primTranslateOrderL
     maybeOrdered = primLTE
 
+
+public export
+implementation Ordered Integer PrimLTE where
+    order a b = p where 
+        postulate p : Either (PrimLTE a b) (PrimLTE b a)
+
+
+ --public export
+ --implementation IntegerDomain Integer PrimLTE where
+ --    One = 1
+ --    plusOneLessOrEq a b = p where 
+ --        postulate p : PrimLTE a b -> Either (a = b) ((AddBigInt a One) `PrimLTE` b)

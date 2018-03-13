@@ -3,6 +3,7 @@ module AbstractInteger.Lemma
 import Util.Common
 import AbstractInteger.Interfaces
 
+
 %default total
 %access export
 
@@ -68,3 +69,13 @@ negatePlusAbelian : AdditiveGroup s => .(a,b : s) ->
     neg (a |+| b) = neg a |+| neg b
 negatePlusAbelian a b = 
     cong {f = neg} (plusCommutes a b) `trans` negatePlus b a
+
+
+exclusiveOrder : IntegerDomain s lessOrEq => .(a,b : s) ->
+    Either (a |+| One  `lessOrEq` b) (b `lessOrEq` a)
+exclusiveOrder {lessOrEq} a b =
+  case order {to = lessOrEq} a b of
+    Left ab => case plusOneLessOrEq {lessOrEq} ab of
+                 Left Refl => Right (reflexive a)
+                 Right prf => Left prf
+    Right ba => Right ba

@@ -24,12 +24,12 @@ plusOnIntervals (Between x ax xb) (Between y cy yd) = let
     in Between (x |+| y) pp qq
 
 public export
-SymRange : PartiallyOrderedAdditiveGroup s rel => .(u : s) -> Type
-SymRange {rel} u = Interval rel (neg u) u
+SymRange : AdditiveGroup s => .(rel : Rel s) -> .(u : s) -> Type
+SymRange rel u = Interval rel (neg u) u
 
 
 inSymRange : PartiallyOrderedAdditiveGroup s rel => (a : s) -> (u : s) ->
-    Maybe (SymRange {rel} u)
+    Maybe (SymRange rel u)
 inSymRange a u = let
     lower = maybeOrdered (neg u) a
     upper = maybeOrdered a u
@@ -37,6 +37,12 @@ inSymRange a u = let
 
 
 addInRange : PartiallyOrderedAdditiveGroup s rel => .{u,v : s} ->
-    SymRange {rel} u -> SymRange {rel} v -> SymRange {rel} (u |+| v)
-addInRange {u} {v} = rewrite negatePlusAbelian u v in plusOnIntervals
+    SymRange rel u -> SymRange rel v -> SymRange rel (u |+| v)
+addInRange {u} {v} = 
+    rewrite negatePlusAbelian u v in plusOnIntervals
 
+
+data Carry = M | O | P
+
+carry : PartiallyOrderedAdditiveGroup s rel => .{u,v : s} ->
+    SymRange rel (u |+| v) -> (Carry, SymRange rel u)

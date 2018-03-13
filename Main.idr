@@ -17,15 +17,15 @@ expBase2 Z x = x
 expBase2 (S k) x = expBase2 k (double x)
 
 doubleInRange : PartiallyOrderedAdditiveGroup s rel => .{u : s} ->
-    SymRange {rel} u -> SymRange {rel} (double u)
+    SymRange rel u -> SymRange rel (double u)
 doubleInRange x = addInRange x x
 
 doubleIterated : PartiallyOrderedAdditiveGroup s rel => .{u : s} ->
-    (n : Nat) -> SymRange {rel} u -> SymRange {rel} (expBase2 n u)
+    (n : Nat) -> SymRange rel u -> SymRange rel (expBase2 n u)
 doubleIterated Z x = x
 doubleIterated (S k) x = doubleIterated k (doubleInRange x)
 
-invokeAbstract : Nat -> SymRange {rel = PrimLTE} 1000 -> Integer
+invokeAbstract : Nat -> SymRange PrimLTE 1000 -> Integer
 invokeAbstract k x = fromInterval (doubleIterated k x)
 
 test : Nat -> Integer -> Maybe Integer
