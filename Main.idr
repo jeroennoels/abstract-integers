@@ -1,5 +1,6 @@
 module Main
 
+import Util.LocalContrib
 import public AbstractInteger.Theory
 import public PrimitiveInteger.Trusted
 
@@ -35,13 +36,13 @@ prim : Nat -> Integer -> Integer
 prim Z x = x
 prim (S k) x = prim k (x+x)
 
-testOrder : (a,b : Integer) -> Alt (PrimLTE (a+1) b) (PrimLTE b a)
+testOrder : (a,b : Integer) -> EitherErased (PrimLTE (a+1) b) (PrimLTE b a)
 testOrder a b = exclusiveOrder {lessOrEq = PrimLTE} a b
 
 lala : (a,b : Integer) -> String
 lala a b = case testOrder a b of
-   Aaa _ => "Left"
-   Bbb _ => "Right"
+   LeftErased _ => "Left"
+   RightErased _ => "Right"
 
 main : IO ()
 main = do x <- getLine

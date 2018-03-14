@@ -2,6 +2,7 @@ module AbstractInteger.Theory
 
 import public Util.Common
 import public AbstractInteger.Interfaces
+import Util.LocalContrib
 import AbstractInteger.Lemma
 
 %access export
@@ -43,19 +44,14 @@ addInRange {u} {v} =
     rewrite negatePlusAbelian u v in plusOnIntervals
 
 
-public export
-data Alt : Type -> Type -> Type where
-    Aaa : a -> Alt a b
-    Bbb : b -> Alt a b
-
 exclusiveOrder : IntegerDomain s lessOrEq => (a,b : s) ->
-    Alt (a |+| One  `lessOrEq` b) (b `lessOrEq` a)
+    EitherErased (a |+| One  `lessOrEq` b) (b `lessOrEq` a)
 exclusiveOrder {lessOrEq} a b =
   case order {to = lessOrEq} a b of
     Left ab => case decEq a b of
-        Yes Refl => Bbb (reflexive {po = lessOrEq} a)
-        No contra => Aaa (plusOneLessOrEq {lessOrEq} ab contra)
-    Right ba => Bbb ba
+        Yes Refl => RightErased (reflexive {po = lessOrEq} a)
+        No contra => LeftErased (plusOneLessOrEq {lessOrEq} ab contra)
+    Right ba => RightErased ba
 
 
 -- data Carry = M | O | P

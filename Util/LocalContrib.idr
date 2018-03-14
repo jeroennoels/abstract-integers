@@ -16,3 +16,7 @@ interface Bifunctor (f : Type -> Type -> Type) where
 implementation Bifunctor Either where
   bimap f _ (Left a) = Left (f a)
   bimap _ g (Right b) = Right (g b)
+
+data EitherErased : Type -> Type -> Type where
+    LeftErased : .a -> EitherErased a b
+    RightErased : .b -> EitherErased a b
