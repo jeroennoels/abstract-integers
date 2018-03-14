@@ -1,5 +1,6 @@
 module PrimitiveInteger.Trusted
 
+import Util.Common
 import Util.Law
 import AbstractInteger.Interfaces
 import Data.So
@@ -15,20 +16,17 @@ PrimAdd = prim__addBigInt
 export
 data PrimLTE : Integer -> Integer -> Type where
     CheckLTE : So (a <= b) -> PrimLTE a b
-    CheckGT : So (not (a <= b)) -> PrimLTE b a
+    CheckNotLTE : So (not (a <= b)) -> PrimLTE b a
 
 public export
-assertPrimLTE : (a,b : Integer) -> Maybe (PrimLTE a b)
-assertPrimLTE a b = case choose (a <= b) of
-    Left oh => Just (CheckLTE oh)
-    Right _ => Nothing
-
-
 orderPrimLTE : (a,b : Integer) -> Either (PrimLTE a b) (PrimLTE b a)
 orderPrimLTE a b = case choose (a <= b) of
     Left oh => Left (CheckLTE oh)
-    Right oh => Right (CheckGT oh)
+    Right oh => Right (CheckNotLTE oh)
 
+public export
+assertPrimLTE : (a,b : Integer) -> Maybe (PrimLTE a b)
+assertPrimLTE a b = leftOrNothing (orderPrimLTE a b)
 
 postulate primPlusAssociative : isAssociative PrimAdd
 postulate primPlusCommutative : isCommutative PrimAdd
@@ -63,9 +61,8 @@ implementation Poset Integer PrimLTE where
 public export
 implementation PartiallyOrderedAdditiveGroup Integer PrimLTE where
     translateOrderL = primTranslateOrderL
-    translateOrderR = commuteTranslationInvariantL 
+    translateOrderR = commuteTranslationInvariantL
         PrimAdd PrimLTE plusCommutes primTranslateOrderL
-
 
 public export
 implementation Ordered Integer PrimLTE where
