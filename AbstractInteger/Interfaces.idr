@@ -43,4 +43,3 @@ interface (UnitalRing s,
     IntegerDomain s (lessOrEq : Rel s)
   where
     plusOneLessOrEq : a `lessOrEq` b -> Not (a = b) -> a |+| One `lessOrEq` b
-

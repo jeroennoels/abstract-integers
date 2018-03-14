@@ -5,6 +5,7 @@ pkgs = contrib
 opts = "--warnreach"
 
 modules =
+  Util.LocalContrib,
   Util.Common,
   Util.Law,
   PrimitiveInteger.Trusted,

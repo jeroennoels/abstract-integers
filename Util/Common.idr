@@ -15,7 +15,3 @@ data Interval : .Rel s -> s -> s -> Type where
 
 fromInterval : Interval {s} _ _ _ -> s
 fromInterval (Between val _ _) = val
-
-leftOrNothing : Either a b -> Maybe a
-leftOrNothing (Left a) = Just a
-leftOrNothing _ = Nothing

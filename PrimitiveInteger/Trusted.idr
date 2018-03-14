@@ -1,8 +1,9 @@
 module PrimitiveInteger.Trusted
 
-import Util.Common
+import Util.LocalContrib
 import Util.Law
 import AbstractInteger.Interfaces
+
 import Data.So
 import Decidable.Order
 
@@ -13,16 +14,14 @@ private
 PrimAdd : Binop Integer
 PrimAdd = prim__addBigInt
 
-export
+public export
 data PrimLTE : Integer -> Integer -> Type where
     CheckLTE : So (a <= b) -> PrimLTE a b
     CheckNotLTE : So (not (a <= b)) -> PrimLTE b a
 
 public export
 orderPrimLTE : (a,b : Integer) -> Either (PrimLTE a b) (PrimLTE b a)
-orderPrimLTE a b = case choose (a <= b) of
-    Left oh => Left (CheckLTE oh)
-    Right oh => Right (CheckNotLTE oh)
+orderPrimLTE a b = bimap CheckLTE CheckNotLTE $ choose (a <= b)
 
 public export
 assertPrimLTE : (a,b : Integer) -> Maybe (PrimLTE a b)
