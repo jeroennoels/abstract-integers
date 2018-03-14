@@ -1,7 +1,7 @@
 module Main
 
-import AbstractInteger.Theory
-import PrimitiveInteger.Trusted
+import public AbstractInteger.Theory
+import public PrimitiveInteger.Trusted
 
 abstractFoo : AdditiveGroup s => s -> s
 abstractFoo x = neg x |+| x |+| Zero |+| x |+| x
@@ -35,6 +35,15 @@ prim : Nat -> Integer -> Integer
 prim Z x = x
 prim (S k) x = prim k (x+x)
 
+testOrder : (a,b : Integer) -> Alt (PrimLTE (a+1) b) (PrimLTE b a)
+testOrder a b = exclusiveOrder {lessOrEq = PrimLTE} a b
+
+lala : (a,b : Integer) -> String
+lala a b = case testOrder a b of
+   Aaa _ => "Left"
+   Bbb _ => "Right"
+
 main : IO ()
 main = do x <- getLine
-          putStrLn $ show (test (cast x) (cast x))
+          y <- getLine
+          putStrLn $ show (lala (cast x) (cast y))

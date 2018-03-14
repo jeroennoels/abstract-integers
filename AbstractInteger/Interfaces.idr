@@ -39,10 +39,9 @@ interface AdditiveGroup s => Ring s where
 
 
 public export
-interface (Ring s, 
-           Ordered s lessOrEq,
+interface (Ring s, DecEq s, Ordered s lessOrEq,
            PartiallyOrderedAdditiveGroup s lessOrEq) =>
     IntegerDomain s (lessOrEq : Rel s)
   where
-    plusOneLessOrEq : a `lessOrEq` b -> Either (a = b) (a |+| One `lessOrEq` b)
+    plusOneLessOrEq : a `lessOrEq` b -> Not (a = b) -> a |+| One `lessOrEq` b
 

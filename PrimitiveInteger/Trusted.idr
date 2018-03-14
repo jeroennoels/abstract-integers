@@ -14,11 +14,18 @@ AddBigInt = prim__addBigInt
 export
 data PrimLTE : Integer -> Integer -> Type where
     CheckLTE : So (a <= b) -> PrimLTE a b
+    CheckGT : So (not (a <= b)) -> PrimLTE b a
 
 primLTE : (a,b : Integer) -> Maybe (PrimLTE a b)
 primLTE a b = case choose (a <= b) of
     Left oh => Just (CheckLTE oh)
     Right _ => Nothing
+
+
+orderPrimLTE : (a,b : Integer) -> Either (PrimLTE a b) (PrimLTE b a)
+orderPrimLTE a b = case choose (a <= b) of
+    Left oh => Left (CheckLTE oh)
+    Right oh => Right (CheckGT oh)
 
 
 postulate primPlusAssociative : isAssociative AddBigInt
@@ -60,12 +67,13 @@ implementation PartiallyOrderedAdditiveGroup Integer PrimLTE where
 
 public export
 implementation Ordered Integer PrimLTE where
-    order a b = p where 
-        postulate p : Either (PrimLTE a b) (PrimLTE b a)
+    order = orderPrimLTE
 
+public export
+implementation Ring Integer where
+    One = 1
 
- --public export
- --implementation IntegerDomain Integer PrimLTE where
- --    One = 1
- --    plusOneLessOrEq a b = p where 
- --        postulate p : PrimLTE a b -> Either (a = b) ((AddBigInt a One) `PrimLTE` b)
+public export
+implementation IntegerDomain Integer PrimLTE where
+    plusOneLessOrEq = p where 
+        postulate p : PrimLTE a b -> Not (a = b) -> (AddBigInt a 1) `PrimLTE` b

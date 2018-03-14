@@ -44,5 +44,22 @@ addInRange {u} {v} =
 
 data Carry = M | O | P
 
-carry : PartiallyOrderedAdditiveGroup s rel => .{u,v : s} ->
-    SymRange rel (u |+| v) -> (Carry, SymRange rel u)
+
+public export
+data Alt : Type -> Type -> Type where
+    Aaa : a -> Alt a b
+    Bbb : b -> Alt a b
+
+exclusiveOrder : IntegerDomain s lessOrEq => (a,b : s) ->
+    Alt (a |+| One  `lessOrEq` b) (b `lessOrEq` a)
+exclusiveOrder {lessOrEq} a b =
+  case order {to = lessOrEq} a b of
+    Left ab => case decEq a b of
+      Yes Refl => Bbb (reflexive {po = lessOrEq} a)
+      No contra => Aaa (plusOneLessOrEq {lessOrEq} ab contra)
+    Right ba => Bbb ba
+
+-- carry : PartiallyOrderedAdditiveGroup s rel => .{u,v : s} ->
+--     SymRange rel (u |+| v) -> (Carry, SymRange rel u)
+
+
