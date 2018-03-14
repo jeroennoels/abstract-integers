@@ -29,7 +29,7 @@ invokeAbstract : Nat -> SymRange PrimLTE 1000 -> Integer
 invokeAbstract k x = fromInterval (doubleIterated k x)
 
 test : Nat -> Integer -> Maybe Integer
-test k n = liftA (invokeAbstract k) (inSymRange n 1000)
+test k n = liftA (invokeAbstract k) (inSymRange assertPrimLTE n 1000)
 
 prim : Nat -> Integer -> Integer
 prim Z x = x
@@ -46,4 +46,4 @@ lala a b = case testOrder a b of
 main : IO ()
 main = do x <- getLine
           y <- getLine
-          putStrLn $ show (lala (cast x) (cast y))
+          putStrLn $ show (test (cast x) (cast y))

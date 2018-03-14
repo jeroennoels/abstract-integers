@@ -30,7 +30,6 @@ interface (AdditiveGroup s, Poset s rel) =>
   where
     translateOrderL : isTranslationInvariantL (|+|) rel
     translateOrderR : isTranslationInvariantR (|+|) rel
-    maybeOrdered : (a,b : s) -> Maybe (rel a b)
 
 -- todo
 public export

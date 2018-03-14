@@ -28,9 +28,10 @@ SymRange : AdditiveGroup s => .(rel : Rel s) -> .(u : s) -> Type
 SymRange rel u = Interval rel (neg u) u
 
 
-inSymRange : PartiallyOrderedAdditiveGroup s rel => (a : s) -> (u : s) ->
+inSymRange : PartiallyOrderedAdditiveGroup s rel =>
+     ((a,b : s) -> Maybe (rel a b)) -> (a : s) -> (u : s) ->
     Maybe (SymRange rel u)
-inSymRange a u = let
+inSymRange maybeOrdered a u = let
     lower = maybeOrdered (neg u) a
     upper = maybeOrdered a u
     in liftA2 (Between a) lower upper
