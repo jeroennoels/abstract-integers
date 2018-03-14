@@ -29,21 +29,18 @@ SymRange rel u = Interval rel (neg u) u
 
 
 inSymRange : PartiallyOrderedAdditiveGroup s rel =>
-     ((a,b : s) -> Maybe (rel a b)) -> (a : s) -> (u : s) ->
-    Maybe (SymRange rel u)
-inSymRange maybeOrdered a u = let
-    lower = maybeOrdered (neg u) a
-    upper = maybeOrdered a u
+    (check : (a,b : s) -> Maybe (rel a b)) -> 
+    (a : s) -> (u : s) -> Maybe (SymRange rel u)
+inSymRange check a u = let
+    lower = check (neg u) a
+    upper = check a u
     in liftA2 (Between a) lower upper
 
 
 addInRange : PartiallyOrderedAdditiveGroup s rel => .{u,v : s} ->
     SymRange rel u -> SymRange rel v -> SymRange rel (u |+| v)
-addInRange {u} {v} = 
+addInRange {u} {v} =
     rewrite negatePlusAbelian u v in plusOnIntervals
-
-
-data Carry = M | O | P
 
 
 public export
@@ -56,10 +53,12 @@ exclusiveOrder : IntegerDomain s lessOrEq => (a,b : s) ->
 exclusiveOrder {lessOrEq} a b =
   case order {to = lessOrEq} a b of
     Left ab => case decEq a b of
-      Yes Refl => Bbb (reflexive {po = lessOrEq} a)
-      No contra => Aaa (plusOneLessOrEq {lessOrEq} ab contra)
+        Yes Refl => Bbb (reflexive {po = lessOrEq} a)
+        No contra => Aaa (plusOneLessOrEq {lessOrEq} ab contra)
     Right ba => Bbb ba
 
+
+-- data Carry = M | O | P
 -- carry : PartiallyOrderedAdditiveGroup s rel => .{u,v : s} ->
 --     SymRange rel (u |+| v) -> (Carry, SymRange rel u)
 

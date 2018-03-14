@@ -4,11 +4,11 @@ import public Util.Common
 import public Util.Law
 import public Decidable.Order
 
+%access public export
 %default total
 
 infixl 8 |+|
 
-public export
 interface AdditiveGroup s where
     (|+|) : Binop s
     Zero : s
@@ -24,21 +24,21 @@ interface AdditiveGroup s where
     plusInverseR = commuteInverseL (|+|) Zero neg plusCommutes plusInverseL
 
 
-public export
 interface (AdditiveGroup s, Poset s rel) =>
     PartiallyOrderedAdditiveGroup s (rel : Rel s)
   where
     translateOrderL : isTranslationInvariantL (|+|) rel
     translateOrderR : isTranslationInvariantR (|+|) rel
 
--- todo
-public export
-interface AdditiveGroup s => Ring s where
+
+||| multiplicative structure to be added later
+interface AdditiveGroup s => UnitalRing s where
     One : s
 
 
-public export
-interface (Ring s, DecEq s, Ordered s lessOrEq,
+interface (UnitalRing s,
+           DecEq s,
+           Ordered s lessOrEq,
            PartiallyOrderedAdditiveGroup s lessOrEq) =>
     IntegerDomain s (lessOrEq : Rel s)
   where

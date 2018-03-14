@@ -69,7 +69,7 @@ implementation Ordered Integer PrimLTE where
     order = orderPrimLTE
 
 public export
-implementation Ring Integer where
+implementation UnitalRing Integer where
     One = 1
 
 public export

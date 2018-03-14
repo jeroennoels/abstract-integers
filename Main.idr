@@ -46,4 +46,4 @@ lala a b = case testOrder a b of
 main : IO ()
 main = do x <- getLine
           y <- getLine
-          putStrLn $ show (lala (cast x) (cast y))
+          putStrLn $ show (test (cast x) (cast y))
