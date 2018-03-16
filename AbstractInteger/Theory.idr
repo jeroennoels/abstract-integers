@@ -54,6 +54,16 @@ exclusiveOrder {lessOrEq} a b =
     Right ba => RightErased ba
 
 
+splitInterval : IntegerDomain s lessOrEq => (a,b,c : s) ->
+    (x : Interval lessOrEq a b) ->
+    Either (Interval lessOrEq a c)
+           (Interval lessOrEq (c |+| One) b)
+splitInterval {lessOrEq} a b c (Between x xlo xhi) = 
+  case exclusiveOrder {lessOrEq} c x of
+    LeftErased prf => Right (Between x prf xhi)
+    RightErased prf => Left (Between x xlo prf)
+    
+
 -- data Carry = M | O | P
 -- carry : PartiallyOrderedAdditiveGroup s rel => .{u,v : s} ->
 --     SymRange rel (u |+| v) -> (Carry, SymRange rel u)

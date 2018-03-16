@@ -39,12 +39,26 @@ prim (S k) x = prim k (x+x)
 testOrder : (a,b : Integer) -> EitherErased (PrimLTE (a+1) b) (PrimLTE b a)
 testOrder a b = exclusiveOrder {lessOrEq = PrimLTE} a b
 
+split : (a,b,c : Integer) -> Interval PrimLTE a b -> 
+    Either (Interval PrimLTE a c)
+           (Interval PrimLTE (c + 1) b)
+split a b c i = splitInterval a b c i
+
+testSplit : (b,c,x : Integer) -> String
+testSplit b c x = case inSymRange assertPrimLTE x b of
+    Just i => case split (-b) b c i of
+                Left _ => "Left"
+                Right _ => "Right"
+    Nothing => "Nothing"            
+
+
 lala : (a,b : Integer) -> String
 lala a b = case testOrder a b of
    LeftErased _ => "Left"
    RightErased _ => "Right"
 
 main : IO ()
-main = do x <- getLine
-          y <- getLine
-          putStrLn $ show (lala (cast x) (cast y))
+main = do b <- getLine
+          c <- getLine 
+          x <- getLine
+          putStrLn $ testSplit (cast b) (cast c) (cast x)
