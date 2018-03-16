@@ -49,8 +49,8 @@ exclusiveOrder : IntegerDomain s lessOrEq => (a,b : s) ->
 exclusiveOrder {lessOrEq} a b =
   case order {to = lessOrEq} a b of
     Left ab => case decEq a b of
-        Yes Refl => RightErased (reflexive {po = lessOrEq} a)
-        No contra => LeftErased (plusOneLessOrEq {lessOrEq} ab contra)
+        Yes Refl => RightErased (reflexive a)
+        No contra => LeftErased (plusOneLessOrEq ab contra)
     Right ba => RightErased ba
 
 
