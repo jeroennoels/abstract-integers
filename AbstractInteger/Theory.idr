@@ -44,22 +44,21 @@ addInRange {u} {v} =
     rewrite negatePlusAbelian u v in plusOnIntervals
 
 
-exclusiveOrder : IntegerDomain s lessOrEq => (a,b : s) ->
-    EitherErased (a |+| One  `lessOrEq` b) (b `lessOrEq` a)
-exclusiveOrder {lessOrEq} a b =
-  case order {to = lessOrEq} a b of
+exclusiveOrder : IntegerDomain s loe => (a,b : s) ->
+    EitherErased (a |+| One  `loe` b) (b `loe` a)
+exclusiveOrder {loe} a b =
+  case order {to = loe} a b of
     Left ab => case decEq a b of
         Yes Refl => RightErased (reflexive a)
         No contra => LeftErased (plusOneLessOrEq ab contra)
     Right ba => RightErased ba
 
 
-splitInterval : IntegerDomain s lessOrEq => (a,b,c : s) ->
-    (x : Interval lessOrEq a b) ->
-    Either (Interval lessOrEq a c)
-           (Interval lessOrEq (c |+| One) b)
-splitInterval {lessOrEq} a b c (Between x xlo xhi) = 
-  case exclusiveOrder {lessOrEq} c x of
+splitInterval : IntegerDomain s loe => (a,b,c : s) ->
+    (x : Interval loe a b) ->
+    Either (Interval loe a c) (Interval loe (c |+| One) b)
+splitInterval {loe} a b c (Between x xlo xhi) = 
+  case exclusiveOrder {loe} c x of
     LeftErased prf => Right (Between x prf xhi)
     RightErased prf => Left (Between x xlo prf)
     
