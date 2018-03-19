@@ -69,3 +69,17 @@ negatePlusAbelian : AdditiveGroup s => .(a,b : s) ->
     neg (a |+| b) = neg a |+| neg b
 negatePlusAbelian a b = 
     cong {f = neg} (plusCommutes a b) `trans` negatePlus b a
+
+
+orderPlusMinusOne : IntegerDomain s rel => .(a,b : s) -> 
+    .(a |+| One `rel` b) -> a `rel` b |+| neg One
+orderPlusMinusOne {s} {rel} a b prf = let
+    o1 = the s (a |+| One)
+    o2 = the (a |+| One |+| neg One `rel` b |+| neg One)
+        (translateOrderR {rel} o1 b (neg One) prf)
+    o3 = (plusAssoc a One (neg One))
+    o4 = plusInverseR {s} One
+    o5 = cong {f = translateL a} o4
+    o7 = (sym (plusNeutralR a) `trans` sym o5) `trans` o3
+    in rewrite o7 in o2
+ 

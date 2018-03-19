@@ -45,7 +45,7 @@ addInRange {u} {v} =
 
 
 exclusiveOrder : IntegerDomain s loe => (a,b : s) ->
-    EitherErased (a |+| One  `loe` b) (b `loe` a)
+    EitherErased (a |+| One `loe` b) (b `loe` a)
 exclusiveOrder {loe} a b =
   case order {to = loe} a b of
     Left ab => case decEq a b of
@@ -66,5 +66,3 @@ splitInterval {loe} a b c (Between x xlo xhi) =
 -- data Carry = M | O | P
 -- carry : PartiallyOrderedAdditiveGroup s rel => .{u,v : s} ->
 --     SymRange rel (u |+| v) -> (Carry, SymRange rel u)
-
-

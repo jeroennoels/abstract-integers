@@ -37,12 +37,13 @@ prim Z x = x
 prim (S k) x = prim k (x+x)
 
 testOrder : (a,b : Integer) -> EitherErased (PrimLTE (a+1) b) (PrimLTE b a)
-testOrder a b = exclusiveOrder {lessOrEq = PrimLTE} a b
+testOrder a b = exclusiveOrder {loe = PrimLTE} a b
 
 split : (a,b,c : Integer) -> Interval PrimLTE a b -> 
     Either (Interval PrimLTE a c)
            (Interval PrimLTE (c + 1) b)
 split a b c i = splitInterval a b c i
+
 
 testSplit : (b,c,x : Integer) -> String
 testSplit b c x = case inSymRange assertPrimLTE x b of
