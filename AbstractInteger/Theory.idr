@@ -54,14 +54,24 @@ exclusiveOrder {loe} a b =
     Right ba => RightErased ba
 
 
-splitInterval : IntegerDomain s loe => (a,b,c : s) ->
+splitIntervalL : IntegerDomain s loe => (a,b,c : s) ->
     (x : Interval loe a b) ->
     Either (Interval loe a c) (Interval loe (c |+| One) b)
-splitInterval {loe} a b c (Between x xlo xhi) = 
+splitIntervalL {loe} a b c (Between x xlo xhi) = 
   case exclusiveOrder {loe} c x of
     LeftErased prf => Right (Between x prf xhi)
     RightErased prf => Left (Between x xlo prf)
     
+
+splitIntervalR : IntegerDomain s loe => (a,b,c : s) ->
+    (x : Interval loe a b) ->
+    Either (Interval loe a (c |+| neg One)) (Interval loe c b)
+splitIntervalR a b c x = 
+    case splitIntervalL a b (c |+| neg One) x of
+      Left aa => Left aa
+      Right bb => let cancel = plusPlusInverseL c One in
+                  Right (rewrite sym cancel in bb)
+     
 
 -- data Carry = M | O | P
 -- carry : PartiallyOrderedAdditiveGroup s rel => .{u,v : s} ->

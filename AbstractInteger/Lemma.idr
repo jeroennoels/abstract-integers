@@ -14,6 +14,20 @@ translateR : AdditiveGroup s => s -> s -> s
 translateR a x = x |+| a
 
 
+plusPlusInverseL : AdditiveGroup s => .(a,b : s) -> a |+| neg b |+| b = a
+plusPlusInverseL a b = let
+    o1 = the
+        (neg b |+| b = Zero)
+        (plusInverseL b)
+    o2 = the
+        (a |+| (neg b |+| b) = a |+| Zero)
+        (cong {f = translateL a} o1)
+    o3 = the
+        (a |+| (neg b |+| b) = a)
+        (o2 `trans` plusNeutralR a)
+    in sym (plusAssoc a _ b) `trans` o3
+
+
 plusPlusInverseR : AdditiveGroup s => .(a,b : s) -> a |+| b |+| neg b = a
 plusPlusInverseR a b = let
     o1 = the
