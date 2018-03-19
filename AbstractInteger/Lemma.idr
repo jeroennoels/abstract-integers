@@ -14,8 +14,22 @@ translateR : AdditiveGroup s => s -> s -> s
 translateR a x = x |+| a
 
 
+plusPlusInverseR : AdditiveGroup s => .(a,b : s) -> a |+| b |+| neg b = a
+plusPlusInverseR a b = let
+    o1 = the
+        (b |+| neg b = Zero)
+        (plusInverseR b)
+    o2 = the
+        (a |+| (b |+| neg b) = a |+| Zero)
+        (cong {f = translateL a} o1)
+    o3 = the
+        (a |+| (b |+| neg b) = a)
+        (o2 `trans` plusNeutralR a)
+    in sym (plusAssoc a b _) `trans` o3
+
+
 plusInversePlusR : AdditiveGroup s => .(a,b : s) -> b |+| (neg b |+| a) = a
-plusInversePlusR a b = let 
+plusInversePlusR a b = let
     o1 = the
         (b |+| neg b = Zero)
         (plusInverseR b)
@@ -24,12 +38,12 @@ plusInversePlusR a b = let
         (cong {f = translateR a} o1)
     o3 = the
         (b |+| neg b |+| a = a)
-        (o2 `trans` plusNeutralL _)
-    in plusAssoc b _ _ `trans` o3
+        (o2 `trans` plusNeutralL a)
+    in plusAssoc b _ a `trans` o3
 
 
 plusInversePlusL : AdditiveGroup s => .(a,b : s) -> neg b |+| (b |+| a) = a
-plusInversePlusL a b = let 
+plusInversePlusL a b = let
     o1 = the
         (neg b |+| b = Zero)
         (plusInverseL b)
@@ -38,8 +52,8 @@ plusInversePlusL a b = let
         (cong {f = translateR a} o1)
     o3 = the
         (neg b |+| b |+| a = a)
-        (o2 `trans` plusNeutralL _)
-    in plusAssoc _ b _ `trans` o3
+        (o2 `trans` plusNeutralL a)
+    in plusAssoc _ b a `trans` o3
 
 
 uniqueInverse : AdditiveGroup s => .(a,b : s) ->
@@ -49,20 +63,11 @@ uniqueInverse a b given = let
         (neg a |+| (a |+| b) = neg a |+| Zero)
         (cong given)
     o2 = the
-        (neg a |+| (a |+| b) = neg a |+| a |+| b)
-        (plusAssoc _ a b)
-    o3 = the
-        (neg a |+| a |+| b = neg a |+| Zero)
-        (sym o2 `trans` o1)
-    o4 = the
-        (neg a |+| a |+| b = Zero |+| b)
-        (cong {f = translateR b} (plusInverseL a))
-    o5 = the
-        (neg a |+| Zero = Zero |+| b)
-        (sym o3 `trans` o4)
+        (neg a |+| (a |+| b) = b)
+        (plusInversePlusL b a)
     o6 = the
         (neg a |+| Zero = b)
-        (o5 `trans` plusNeutralL b)
+        (sym o1 `trans` o2)
     qed = the
         (neg a = b)
         (sym (plusNeutralR _) `trans` o6)
@@ -86,19 +91,18 @@ negatePlus a b = let
 
 negatePlusAbelian : AdditiveGroup s => .(a,b : s) ->
     neg (a |+| b) = neg a |+| neg b
-negatePlusAbelian a b = 
+negatePlusAbelian a b =
     cong {f = neg} (plusCommutes a b) `trans` negatePlus b a
 
 
-orderPlusMinusOne : IntegerDomain s rel => .(a,b : s) -> 
+orderPlusMinusOne : IntegerDomain s rel => .(a,b : s) ->
     .(a |+| One `rel` b) -> a `rel` b |+| neg One
 orderPlusMinusOne {s} {rel} a b prf = let
     o1 = the s (a |+| One)
-    o2 = the (a |+| One |+| neg One `rel` b |+| neg One)
-        (translateOrderR {rel} o1 b (neg One) prf)
-    o3 = (plusAssoc a One (neg One))
-    o4 = plusInverseR {s} One
-    o5 = cong {f = translateL a} o4
-    o7 = (sym (plusNeutralR a) `trans` sym o5) `trans` o3
-    in rewrite o7 in o2
- 
+    o2 = the
+        (a |+| One |+| neg One `rel` b |+| neg One)
+        (translateOrderR o1 b (neg One) prf)
+    o3 = the
+        (a |+| One |+| neg One = a)
+        (plusPlusInverseR a One)
+    in rewrite sym o3 in o2
