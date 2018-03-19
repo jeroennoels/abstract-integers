@@ -65,12 +65,12 @@ uniqueInverse a b given = let
     o2 = the
         (neg a |+| (a |+| b) = b)
         (plusInversePlusL b a)
-    o6 = the
+    o3 = the
         (neg a |+| Zero = b)
         (sym o1 `trans` o2)
     qed = the
         (neg a = b)
-        (sym (plusNeutralR _) `trans` o6)
+        (sym (plusNeutralR _) `trans` o3)
     in qed
 
 
@@ -98,11 +98,11 @@ negatePlusAbelian a b =
 orderPlusMinusOne : IntegerDomain s rel => .(a,b : s) ->
     .(a |+| One `rel` b) -> a `rel` b |+| neg One
 orderPlusMinusOne {s} {rel} a b prf = let
-    o1 = the s (a |+| One)
-    o2 = the
+    aPlusOne = the s (a |+| One)
+    o1 = the
         (a |+| One |+| neg One `rel` b |+| neg One)
-        (translateOrderR o1 b (neg One) prf)
-    o3 = the
+        (translateOrderR aPlusOne b (neg One) prf)
+    o2 = the
         (a |+| One |+| neg One = a)
         (plusPlusInverseR a One)
-    in rewrite sym o3 in o2
+    in rewrite sym o2 in o1
