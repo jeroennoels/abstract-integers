@@ -39,15 +39,15 @@ prim (S k) x = prim k (x+x)
 testOrder : (a,b : Integer) -> EitherErased (PrimLTE (a+1) b) (PrimLTE b a)
 testOrder a b = exclusiveOrder {loe = PrimLTE} a b
 
-split : (a,b,c : Integer) -> Interval PrimLTE a b -> 
+split : (c : Integer) -> Interval PrimLTE a b -> 
     Either (Interval PrimLTE a (c + (-1)))
            (Interval PrimLTE c b)
-split a b c i = splitIntervalR a b c i
+split c i = splitIntervalR c i
 
 
 testSplit : (b,c,x : Integer) -> String
 testSplit b c x = case inSymRange assertPrimLTE x b of
-    Just i => case split (-b) b c i of
+    Just i => case split c i of
                 Left _ => "Left"
                 Right _ => "Right"
     Nothing => "Nothing"            

@@ -109,14 +109,14 @@ negatePlusAbelian a b =
     cong {f = neg} (plusCommutes a b) `trans` negatePlus b a
 
 
-orderPlusMinusOne : IntegerDomain s rel => .(a,b : s) ->
-    .(a |+| One `rel` b) -> a `rel` b |+| neg One
-orderPlusMinusOne {s} {rel} a b prf = let
-    aPlusOne = the s (a |+| One)
+orderPlusMinus : PartiallyOrderedAdditiveGroup s rel => .(a,b,c : s) ->
+    .(a |+| c `rel` b) -> a `rel` b |+| neg c
+orderPlusMinus {s} {rel} a b c prf = let
+    ac = the s (a |+| c)
     o1 = the
-        (a |+| One |+| neg One `rel` b |+| neg One)
-        (translateOrderR aPlusOne b (neg One) prf)
+        (a |+| c |+| neg c `rel` b |+| neg c)
+        (translateOrderR ac b (neg c) prf)
     o2 = the
-        (a |+| One |+| neg One = a)
-        (plusPlusInverseR a One)
+        (a |+| c |+| neg c = a)
+        (plusPlusInverseR a c)
     in rewrite sym o2 in o1

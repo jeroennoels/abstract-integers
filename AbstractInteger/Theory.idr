@@ -8,6 +8,13 @@ import AbstractInteger.Lemma
 %access export
 %default total
 
+
+shiftInterval : PartiallyOrderedAdditiveGroup s rel => (c : s) ->
+    Interval rel a b -> Interval rel (a |+| c) (b |+| c)
+shiftInterval {a} {b} c (Between x ax xb) = 
+    Between (x |+| c) (translateOrderR a x c ax) (translateOrderR x b c xb)
+
+
 plusPreservesOrder : PartiallyOrderedAdditiveGroup s rel => .(a,b,c,d : s) ->
     .rel a b -> .rel c d -> rel (a |+| c) (b |+| d)
 plusPreservesOrder a b c d ab cd =
@@ -22,7 +29,8 @@ plusOnIntervals : PartiallyOrderedAdditiveGroup s rel =>
 plusOnIntervals (Between x ax xb) (Between y cy yd) = let
     pp = plusPreservesOrder _ x _ y ax cy
     qq = plusPreservesOrder x _ y _ xb yd
-    in Between (x |+| y) pp qq
+    in Between (x |+| y) pp qq               
+
 
 public export
 SymRange : AdditiveGroup s => .(rel : Rel s) -> .(u : s) -> Type
@@ -54,25 +62,32 @@ exclusiveOrder {loe} a b =
     Right ba => RightErased ba
 
 
-splitIntervalL : IntegerDomain s loe => (a,b,c : s) ->
+||| Decide if x is in the left interval or the right one.
+splitIntervalL : IntegerDomain s loe => (c : s) ->
     (x : Interval loe a b) ->
     Either (Interval loe a c) (Interval loe (c |+| One) b)
-splitIntervalL {loe} a b c (Between x xlo xhi) = 
+splitIntervalL {loe} c (Between x xlo xhi) = 
   case exclusiveOrder {loe} c x of
     LeftErased prf => Right (Between x prf xhi)
     RightErased prf => Left (Between x xlo prf)
     
-
-splitIntervalR : IntegerDomain s loe => (a,b,c : s) ->
+    
+||| Decide if x is in the left interval or the right one.
+splitIntervalR : IntegerDomain s loe => (c : s) ->
     (x : Interval loe a b) ->
     Either (Interval loe a (c |+| neg One)) (Interval loe c b)
-splitIntervalR a b c x = 
-    case splitIntervalL a b (c |+| neg One) x of
+splitIntervalR c x = 
+    case splitIntervalL (c |+| neg One) x of
       Left aa => Left aa
       Right bb => let cancel = plusPlusInverseL c One in
                   Right (rewrite sym cancel in bb)
-     
 
--- data Carry = M | O | P
--- carry : PartiallyOrderedAdditiveGroup s rel => .{u,v : s} ->
---     SymRange rel (u |+| v) -> (Carry, SymRange rel u)
+     
+data Carry = M | O | P
+
+
+-- carry : IntegerDomain s loe => .{u : s} ->
+--     SymRange loe (u |+| u) -> (Carry, SymRange loe u)
+-- carry {u} x = let
+--    lala = splitIntervalL (neg u) x
+--    in ?mm
