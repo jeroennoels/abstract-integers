@@ -147,41 +147,10 @@ negateZero : AdditiveGroup s => neg {s} Zero = Zero
 negateZero = uniqueInverse Zero Zero (plusNeutralL Zero)
         
         
-negatePositive : PartiallyOrderedAdditiveGroup s rel => .(a : s) ->
-    .rel Zero a -> neg a `rel` Zero
-negatePositive {s} a pos = let 
-    o1 = negationReversesOrder Zero a pos 
-    o2 = negateZero {s} in
-    rewrite sym o2 in o1
-    
-
-negateNegative : PartiallyOrderedAdditiveGroup s rel => .(a : s) ->
-    .rel a Zero -> Zero `rel` neg a
-negateNegative {rel} a prf = let
-    o1 = the
-        (neg a |+| a `rel` neg a |+| Zero)
-        (translateOrderL _ _ (neg a) prf)
-    in rewriteRelation rel (plusInverseL a) (plusNeutralR (neg a)) o1
-    
-
 plusPreservesOrder : PartiallyOrderedAdditiveGroup s rel => .(a,b,c,d : s) ->
     .rel a b -> .rel c d -> rel (a |+| c) (b |+| d)
 plusPreservesOrder a b c d ab cd =
   let pp = translateOrderR a b c ab
       qq = translateOrderL c d b cd
   in transitive (a |+| c) _ _ pp qq
-
-
-weakenPlusPositive : PartiallyOrderedAdditiveGroup s rel => .(a,b,c : s) ->
-    .rel Zero b -> .rel (a |+| b) c -> rel a c    
-weakenPlusPositive {rel} a b c pos abc = let
-    o1 = the 
-        (neg b `rel` Zero)
-        (negatePositive {rel} b pos)
-    o2 = the
-        (a |+| b |+| neg b `rel` c |+| Zero) 
-        (plusPreservesOrder _ c _ Zero abc o1) 
-    in 
-    rewrite sym (plusPlusInverseR a b) in 
-    rewrite sym (plusNeutralR c) in o2
 
