@@ -3,6 +3,7 @@ module AbstractInteger.Theory
 import public Util.Common
 import public AbstractInteger.Interfaces
 import Util.LocalContrib
+import AbstractInteger.Additive
 import AbstractInteger.Lemma
 
 %access export
