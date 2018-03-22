@@ -56,7 +56,7 @@ plusInversePlusR a b = let
     in plusAssoc b _ a `trans` o3
 
 
-plusInversePlusL : AdditiveGroup s => .(a,b : s) -> neg b |+| (b |+| a) = a
+plusInversePlusL : AdditiveGroup s => .(a,b : s) -> neg b |+| b |+| a = a
 plusInversePlusL a b = let
     o1 = the
         (neg b |+| b = Zero)
@@ -67,18 +67,17 @@ plusInversePlusL a b = let
     o3 = the
         (neg b |+| b |+| a = a)
         (o2 `trans` plusNeutralL a)
-    in plusAssoc _ b a `trans` o3
+    in o3--plusAssoc _ b a `trans` o3
 
 
-uniqueInverse : AdditiveGroup s => .(a,b : s) ->
-    a |+| b = Zero -> neg a = b
+uniqueInverse : AdditiveGroup s => .(a,b : s) -> a |+| b = Zero -> neg a = b
 uniqueInverse a b given = let
     o1 = the
         (neg a |+| (a |+| b) = neg a |+| Zero)
         (cong given)
     o2 = the
         (neg a |+| (a |+| b) = b)
-        (plusInversePlusL b a)
+        (plusAssoc _ a b `trans` plusInversePlusL b a)
     o3 = the
         (neg a |+| Zero = b)
         (sym o1 `trans` o2)
@@ -88,8 +87,7 @@ uniqueInverse a b given = let
     in qed
 
 
-negatePlus : AdditiveGroup s => .(a,b : s) ->
-    neg (a |+| b) = neg b |+| neg a
+negatePlus : AdditiveGroup s => .(a,b : s) -> neg (a |+| b) = neg b |+| neg a
 negatePlus a b = let
     o1 = the
         (b |+| (neg b |+| neg a) = neg a)
@@ -109,6 +107,14 @@ negatePlusAbelian a b =
     cong {f = neg} (plusCommutes a b) `trans` negatePlus b a
 
 
+negatePlusPlus : AdditiveGroup s => .(a,b : s) -> neg (a |+| b) |+| a = neg b
+negatePlusPlus a b = let
+    o1 = the
+       (neg (a |+| b) |+| a = neg b |+| neg a |+| a)
+       (cong {f = translateR a} (negatePlus a b))
+    in o1 `trans` plusPlusInverseL _ a
+
+
 orderPlusMinus : PartiallyOrderedAdditiveGroup s rel => .(a,b,c : s) ->
     .(a |+| c `rel` b) -> a `rel` b |+| neg c
 orderPlusMinus {s} {rel} a b c prf = let
@@ -120,3 +126,62 @@ orderPlusMinus {s} {rel} a b c prf = let
         (a |+| c |+| neg c = a)
         (plusPlusInverseR a c)
     in rewrite sym o2 in o1
+
+
+negationReversesOrder : PartiallyOrderedAdditiveGroup s rel => .(a,b : s) ->
+    .rel a b -> neg b `rel` neg a
+negationReversesOrder {rel} a b given = let
+    o1 = the
+        (neg a |+| a `rel` neg a |+| b)
+        (translateOrderL _ _ (neg a) given)
+    o2 = the
+        (neg a |+| a |+| neg b `rel` neg a |+| b |+| neg b)
+        (translateOrderR _ _ (neg b) o1)
+   -- todo: annotate
+    o3 = plusInversePlusL (neg b) a
+    o4 = plusPlusInverseR (neg a) b   
+    in rewriteRelation rel o3 o4 o2
+
+
+negateZero : AdditiveGroup s => neg {s} Zero = Zero
+negateZero = uniqueInverse Zero Zero (plusNeutralL Zero)
+        
+        
+negatePositive : PartiallyOrderedAdditiveGroup s rel => .(a : s) ->
+    .rel Zero a -> neg a `rel` Zero
+negatePositive {s} a pos = let 
+    o1 = negationReversesOrder Zero a pos 
+    o2 = negateZero {s} in
+    rewrite sym o2 in o1
+    
+
+negateNegative : PartiallyOrderedAdditiveGroup s rel => .(a : s) ->
+    .rel a Zero -> Zero `rel` neg a
+negateNegative {rel} a prf = let
+    o1 = the
+        (neg a |+| a `rel` neg a |+| Zero)
+        (translateOrderL _ _ (neg a) prf)
+    in rewriteRelation rel (plusInverseL a) (plusNeutralR (neg a)) o1
+    
+
+plusPreservesOrder : PartiallyOrderedAdditiveGroup s rel => .(a,b,c,d : s) ->
+    .rel a b -> .rel c d -> rel (a |+| c) (b |+| d)
+plusPreservesOrder a b c d ab cd =
+  let pp = translateOrderR a b c ab
+      qq = translateOrderL c d b cd
+  in transitive (a |+| c) _ _ pp qq
+
+
+weakenPlusPositive : PartiallyOrderedAdditiveGroup s rel => .(a,b,c : s) ->
+    .rel Zero b -> .rel (a |+| b) c -> rel a c    
+weakenPlusPositive {rel} a b c pos abc = let
+    o1 = the 
+        (neg b `rel` Zero)
+        (negatePositive {rel} b pos)
+    o2 = the
+        (a |+| b |+| neg b `rel` c |+| Zero) 
+        (plusPreservesOrder _ c _ Zero abc o1) 
+    in 
+    rewrite sym (plusPlusInverseR a b) in 
+    rewrite sym (plusNeutralR c) in o2
+

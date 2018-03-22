@@ -74,3 +74,4 @@ implementation UnitalRing Integer where
 public export
 implementation IntegerDomain Integer PrimLTE where
     plusOneLessOrEq = plusOnePrimLTE
+    onePositive = the (PrimLTE 0 1) (CheckLTE Oh)

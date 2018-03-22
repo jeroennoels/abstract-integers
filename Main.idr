@@ -58,8 +58,19 @@ lala a b = case testOrder a b of
    LeftErased _ => "Left"
    RightErased _ => "Right"
 
+
+testCarry : (x : Integer) -> String
+testCarry x = case assertPrimLTE 2 9 of
+  Just prf =>
+    case inSymRange assertPrimLTE x 18 of
+      Just i => show $ fromInterval (carry 9 prf i P)
+      Nothing => "Nothing"            
+  Nothing => "Nothing"            
+
+
+
 main : IO ()
-main = do b <- getLine
-          c <- getLine 
+main = do -- b <- getLine
+--          c <- getLine 
           x <- getLine
-          putStrLn $ testSplit (cast b) (cast c) (cast x)
+          putStrLn $ testCarry (cast x)
