@@ -10,7 +10,7 @@ modules =
   Util.Law,
   PrimitiveInteger.Trusted,
   AbstractInteger.Additive,
-  AbstractInteger.Lemma,
+  AbstractInteger.OrderedAdditive,
   AbstractInteger.Interfaces,
   AbstractInteger.Theory,
   Test

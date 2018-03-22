@@ -4,7 +4,7 @@ import public Util.Common
 import public AbstractInteger.Interfaces
 import Util.LocalContrib
 import AbstractInteger.Additive
-import AbstractInteger.Lemma
+import AbstractInteger.OrderedAdditive
 
 %access export
 %default total
@@ -96,6 +96,8 @@ orderPlusOne {loe} a =
                   (onePositive {lessOrEq = loe}) 
        bbb =  plusNeutralR a
    in rewriteRelation loe bbb Refl lala
+
+-- redo all of the following using an embedding of Nat
 
 zeroLessThanOne : IntegerDomain s loe => loe Zero One
 zeroLessThanOne {s} {loe} = let lala = orderPlusOne {loe} Zero 

@@ -91,6 +91,7 @@ uniqueInverse a b given = qed where
 export
 negatePlus : AdditiveGroup s => .(a,b : s) -> neg (a |+| b) = neg b |+| neg a
 negatePlus a b = qed where
+
     o1 : b |+| (neg b |+| neg a) = neg a
     o1 = plusAssoc b _ _ `trans` plusInversePlusR _ b
 
@@ -112,11 +113,12 @@ negatePlusAbelian a b =
 
 export
 negatePlusPlus : AdditiveGroup s => .(a,b : s) -> neg (a |+| b) |+| a = neg b
-negatePlusPlus a b = let
-    o1 = the
-       (neg (a |+| b) |+| a = neg b |+| neg a |+| a)
-       (cong {f = translateR a} (negatePlus a b))
-    in o1 `trans` plusPlusInverseL _ a
+negatePlusPlus a b = qed where
+
+    o1 : neg (a |+| b) |+| a = neg b |+| neg a |+| a
+    o1 = cong {f = translateR a} (negatePlus a b)
+
+    qed = o1 `trans` plusPlusInverseL _ a
 
 
 export
