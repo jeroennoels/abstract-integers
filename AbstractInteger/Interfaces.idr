@@ -27,9 +27,12 @@ interface AdditiveGroup s where
     plusInverseR = commuteInverseL (|+|) Zero neg plusCommutes plusInverseL
 
 
-||| multiplicative structure to be added later
+||| Multiplicative structure to be added later.
 interface AdditiveGroup s => UnitalRing s where
     One : s
+    nat : .Nat -> s
+    embedNatZ : nat Z = Zero
+    embedNatS : nat (S n) = One |+| nat n
 
 
 interface (AdditiveGroup s, Poset s rel) =>

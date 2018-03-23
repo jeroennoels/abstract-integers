@@ -68,9 +68,14 @@ testCarry x = case assertPrimLTE 2 9 of
   Nothing => "Nothing"            
 
 
+bigNat : Nat
+bigNat = 10000000000000000000000000000000000000000000000000000000000000000000000
+
+castBigNat : Integer
+castBigNat = toIntegerNat bigNat
+
 
 main : IO ()
-main = do -- b <- getLine
---          c <- getLine 
-          x <- getLine
+main = do putStrLn $ show (castBigNat |+| castBigNat)
+          x <- getLine          
           putStrLn $ testCarry (cast x)

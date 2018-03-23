@@ -70,6 +70,9 @@ implementation Ordered Integer PrimLTE where
 public export
 implementation UnitalRing Integer where
     One = 1
+    nat = toIntegerNat
+    embedNatZ = Refl
+    embedNatS = Refl
 
 public export
 implementation IntegerDomain Integer PrimLTE where
