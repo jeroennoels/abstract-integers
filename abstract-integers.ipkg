@@ -8,11 +8,12 @@ modules =
   Util.LocalContrib,
   Util.Common,
   Util.Law,
-  PrimitiveInteger.Trusted,
+  AbstractInteger.Interfaces,
   AbstractInteger.Additive,
   AbstractInteger.OrderedAdditive,
-  AbstractInteger.Interfaces,
+  AbstractInteger.Interval,
   AbstractInteger.Theory,
+  PrimitiveInteger.Trusted,
   Test
 
 executable = runAbstractIntegers

@@ -1,6 +1,7 @@
 module AbstractInteger.OrderedAdditive
 
 import Util.Common
+import Util.LocalContrib
 import AbstractInteger.Interfaces
 import AbstractInteger.Additive
 
@@ -51,3 +52,15 @@ plusPreservesOrder a b c d ab cd =
     let pp = translateOrderR a b c ab
         qq = translateOrderL c d b cd
     in transitive (a |+| c) _ _ pp qq
+
+
+||| Decide whether @a < @b or @a >= @b.
+export
+exclusiveOrder : IntegerDomain s loe => (a,b : s) ->
+    EitherErased (a |+| One `loe` b) (b `loe` a)
+exclusiveOrder {loe} a b =
+  case order {to = loe} a b of
+    Left ab => case decEq a b of
+        Yes Refl => RightErased (reflexive a)
+        No contra => LeftErased (plusOneLessOrEq ab contra)
+    Right ba => RightErased ba
