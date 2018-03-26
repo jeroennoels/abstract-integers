@@ -9,8 +9,6 @@ import public Decidable.Order
 
 infixl 8 |+|
 
--- The order of interface definitions matters because of the so-called
--- diamond inheritance issue.
 
 interface AdditiveGroup s where
     (|+|) : Binop s
@@ -27,12 +25,6 @@ interface AdditiveGroup s where
     plusInverseR = commuteInverseL (|+|) Zero neg plusCommutes plusInverseL
 
 
-||| Multiplicative structure to be added later.
-interface AdditiveGroup s => UnitalRing s where
-    One : s
-    nat : .Nat -> s
-
-
 interface (AdditiveGroup s, Poset s rel) =>
     PartiallyOrderedAdditiveGroup s (rel : Rel s)
   where
@@ -40,13 +32,14 @@ interface (AdditiveGroup s, Poset s rel) =>
     translateOrderR : isTranslationInvariantR (|+|) rel
 
 
-interface (UnitalRing s,
-           DecEq s,
+interface (DecEq s,
            Ordered s lessOrEq,
            PartiallyOrderedAdditiveGroup s lessOrEq) =>
-    IntegerDomain s (lessOrEq : Rel s) 
+    IntegerDomain s (lessOrEq : Rel s) | s
   where
-    embedNatZ : nat {s} Z = Zero
-    embedNatS : nat {s} (S n) = One |+| nat {s} n
+    One : s
+    nat : .Nat -> s
+    embedNatZ : nat Z = Zero
+    embedNatS : nat (S n) = One |+| nat n
     plusOneLessOrEq : a `lessOrEq` b -> Not (a = b) -> a |+| One `lessOrEq` b
     onePositive : Zero `lessOrEq` One

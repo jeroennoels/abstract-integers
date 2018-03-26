@@ -26,7 +26,7 @@ zeroLessThanNat {s} {loe} {n = S k} = let
     hyp = zeroLessThanNat {loe} {n = k} 
     lll = orderPlusOne {loe} (nat {s} k) 
     bbb = transitive {po = loe} _ _ _ hyp lll
-    aaa = embedNatS {s} {lessOrEq = loe} {n = k}
+    aaa = embedNatS {s} {n = k}
     in rewriteRelation loe Refl (sym aaa) bbb
 
 

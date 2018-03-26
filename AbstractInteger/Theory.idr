@@ -15,13 +15,9 @@ semiRangeToSymRange : PartiallyOrderedAdditiveGroup s rel =>
 semiRangeToSymRange {rel} {a} {b} pos ba (Between x pp qq) = 
     Between x pp (transitive x b a qq ba)
 
+
 public export
 data Carry = M | O | P
-
-sign : UnitalRing s => Carry -> s
-sign M = neg One
-sign O = Zero
-sign P = One
 
 
 orderPlusOne : IntegerDomain s loe => (a : s) -> loe a (a |+| One) 
@@ -37,7 +33,7 @@ orderPlusOne {loe} a =
 zeroLessThanOne : IntegerDomain s loe => loe Zero One
 zeroLessThanOne {s} {loe} = let lala = orderPlusOne {loe} Zero 
                                 brol = plusNeutralL {s} One 
-                            in rewrite sym brol in lala 
+                            in rewriteRelation loe Refl brol lala 
 
 oneLessThanTwo : IntegerDomain s loe => loe One (One |+| One)
 oneLessThanTwo {loe} = orderPlusOne {loe} One

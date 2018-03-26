@@ -67,13 +67,11 @@ public export
 implementation Ordered Integer PrimLTE where
     order = orderPrimLTE
 
-public export
-implementation UnitalRing Integer where
-    One = 1
-    nat = toIntegerNat
 
 public export
 implementation IntegerDomain Integer PrimLTE where
+    One = 1
+    nat = toIntegerNat
     embedNatZ = Refl
     embedNatS = Refl
     plusOneLessOrEq = plusOnePrimLTE
