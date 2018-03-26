@@ -31,8 +31,6 @@ interface AdditiveGroup s where
 interface AdditiveGroup s => UnitalRing s where
     One : s
     nat : .Nat -> s
-    embedNatZ : nat Z = Zero
-    embedNatS : nat (S n) = One |+| nat n
 
 
 interface (AdditiveGroup s, Poset s rel) =>
@@ -46,7 +44,9 @@ interface (UnitalRing s,
            DecEq s,
            Ordered s lessOrEq,
            PartiallyOrderedAdditiveGroup s lessOrEq) =>
-    IntegerDomain s (lessOrEq : Rel s)
+    IntegerDomain s (lessOrEq : Rel s) 
   where
+    embedNatZ : nat {s} Z = Zero
+    embedNatS : nat {s} (S n) = One |+| nat {s} n
     plusOneLessOrEq : a `lessOrEq` b -> Not (a = b) -> a |+| One `lessOrEq` b
     onePositive : Zero `lessOrEq` One

@@ -72,7 +72,7 @@ bigNat : Nat
 bigNat = 10000000000000000000000000000000000000000000000000000000000000000000000
 
 castBigNat : Integer
-castBigNat = toIntegerNat bigNat
+castBigNat = nat bigNat
 
 
 main : IO ()

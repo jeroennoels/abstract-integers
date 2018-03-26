@@ -12,6 +12,7 @@ modules =
   AbstractInteger.Additive,
   AbstractInteger.OrderedAdditive,
   AbstractInteger.Interval,
+  AbstractInteger.EmbedNat,
   AbstractInteger.Theory,
   PrimitiveInteger.Trusted,
   Test
