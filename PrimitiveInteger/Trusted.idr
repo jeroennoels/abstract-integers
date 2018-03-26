@@ -71,10 +71,10 @@ public export
 implementation UnitalRing Integer where
     One = 1
     nat = toIntegerNat
-    embedNatZ = Refl
-    embedNatS = Refl
 
 public export
 implementation IntegerDomain Integer PrimLTE where
+    embedNatZ = Refl
+    embedNatS = Refl
     plusOneLessOrEq = plusOnePrimLTE
     onePositive = the (PrimLTE 0 1) (CheckLTE Oh)
