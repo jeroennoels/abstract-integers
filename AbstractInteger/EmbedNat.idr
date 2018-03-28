@@ -2,6 +2,7 @@ module AbstractInteger.EmbedNat
 
 import Util.Common
 import AbstractInteger.Interfaces
+import AbstractInteger.Additive
 
 %default total
 
@@ -48,3 +49,18 @@ orderSucc {loe} {s} {n = S k} {m = S j} (LTESucc prf) =
 
     o1 : One |+| nat k `loe` One |+| nat j
     o1 = translateOrderL {rel = loe} _ _ One ih
+
+
+export
+natInterval : IntegerDomain s loe => (x : Nat) -> .(a,b : Nat) -> 
+    .{auto p : LTE a x} -> .{auto q : LTE x b} -> Interval loe (nat a) (nat b)
+natInterval {loe} x a b {p} {q} = 
+    Between (nat x) (orderSucc {loe} p) (orderSucc {loe} q)
+
+
+export
+plusNatZ : IntegerDomain s loe => (a : s) -> a |+| nat 0 = a
+plusNatZ a = o1 `trans` plusNeutralR a
+  where
+    o1 : a |+| nat 0 = a |+| Zero
+    o1 = cong {f = translateL a} embedNatZ

@@ -38,7 +38,7 @@ interface (DecEq s,
     IntegerDomain s (lessOrEq : Rel s) | s
   where
     One : s
-    nat : .Nat -> s
+    nat : Nat -> s
     embedNatZ : nat Z = Zero
     embedNatS : nat (S n) = One |+| nat n
     plusOneLessOrEq : a `lessOrEq` b -> Not (a = b) -> a |+| One `lessOrEq` b
