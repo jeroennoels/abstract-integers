@@ -22,9 +22,9 @@ data Carry = M | O | P
 
 
 onePlusCarry : IntegerDomain s loe => Carry -> Interval loe (nat 0) (nat 2)
-onePlusCarry M = natInterval 0 _ _
-onePlusCarry O = natInterval 1 _ _
-onePlusCarry P = natInterval 2 _ _
+onePlusCarry M = natInterval 0
+onePlusCarry O = natInterval 1
+onePlusCarry P = natInterval 2
 
 
 rewriteInterval : PartiallyOrderedAdditiveGroup s rel =>

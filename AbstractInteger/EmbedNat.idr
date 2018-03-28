@@ -52,9 +52,9 @@ orderSucc {loe} {s} {n = S k} {m = S j} (LTESucc prf) =
 
 
 export
-natInterval : IntegerDomain s loe => (x : Nat) -> .(a,b : Nat) -> 
+natInterval : IntegerDomain s loe => (x : Nat) -> .{a,b : Nat} -> 
     .{auto p : LTE a x} -> .{auto q : LTE x b} -> Interval loe (nat a) (nat b)
-natInterval {loe} x a b {p} {q} = 
+natInterval {loe} x {p} {q} = 
     Between (nat x) (orderSucc {loe} p) (orderSucc {loe} q)
 
 
