@@ -41,14 +41,14 @@ rewriteIntervalBis {s} {a} (Between x p q) = Between x
     (rewrite sym (plusNatZ a) in p) q
 
 
-carry : IntegerDomain s loe => (u : s) -> loe (nat 2) u ->
-    SymRange loe (u |+| u) -> Carry -> SymRange loe u
+carry : IntegerDomain s loe => (u : s) -> .loe (nat 2) u ->
+    SymRange loe (u |+| u) -> Carry -> (Carry, SymRange loe u)
 carry u moreThanTwo x c =
   case splitIntervalL (neg u) x of
     Left y => let y1 = shiftInterval u y
                   y2 = plusOnIntervals y1 (onePlusCarry c)
                   y3 = rewriteIntervalBis (rewriteInterval y2)
-              in semiRangeToSymRange moreThanTwo y3
+              in (M, semiRangeToSymRange moreThanTwo y3)
     Right y =>
       case splitIntervalR u y of
         Left z => ?middle

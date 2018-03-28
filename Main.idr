@@ -63,7 +63,7 @@ testCarry : (x : Integer) -> String
 testCarry x = case assertPrimLTE 2 9 of
   Just prf =>
     case inSymRange assertPrimLTE x 18 of
-      Just i => show $ fromInterval (carry 9 prf i P)
+      Just i => show $ fromInterval (snd (carry 9 prf i M))
       Nothing => "Nothing"            
   Nothing => "Nothing"            
 

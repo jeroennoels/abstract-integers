@@ -19,6 +19,15 @@ shiftInterval {a} {b} c (Between x ax xb) =
 
 
 export
+negateInterval : PartiallyOrderedAdditiveGroup s rel =>
+    Interval rel a b -> Interval rel (neg b) (neg a)
+negateInterval {a} {b} (Between x ax xb) =
+    Between (neg x) 
+        (negationReversesOrder x b xb) 
+        (negationReversesOrder a x ax) 
+
+
+export
 plusOnIntervals : PartiallyOrderedAdditiveGroup s rel =>
     Interval rel a b -> Interval rel c d ->
     Interval rel (a |+| c) (b |+| d)
