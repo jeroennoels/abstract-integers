@@ -4,7 +4,7 @@ import Util.LocalContrib
 import Util.Law
 import AbstractInteger.Interfaces
 
-import Data.So
+import public Data.So
 import Decidable.Order
 
 %default total
