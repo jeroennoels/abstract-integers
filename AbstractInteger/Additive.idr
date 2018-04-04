@@ -13,6 +13,10 @@ public export
 translateR : AdditiveGroup s => s -> s -> s
 translateR a x = x |+| a
 
+public export
+double : AdditiveGroup s => s -> s
+double x = x |+| x
+
 
 export
 plusPlusInverseL : AdditiveGroup s => .(a,b : s) -> a |+| neg b |+| b = a
@@ -124,3 +128,15 @@ negatePlusPlus a b = qed where
 export
 negateZero : AdditiveGroup s => neg {s} Zero = Zero
 negateZero = uniqueInverse Zero Zero (plusNeutralL Zero)
+
+
+export
+negateInvolution : AdditiveGroup s => .(a : s) -> neg (neg a) = a
+negateInvolution a = uniqueInverse _ a (plusInverseL a)
+
+
+export
+negatePlusNegate : AdditiveGroup s => .(a,b : s) ->
+    neg (a |+| neg b) = neg a |+| b
+negatePlusNegate a b =
+    negatePlusAbelian a (neg b) `trans` cong (negateInvolution b)

@@ -10,8 +10,6 @@ abstractFoo x = neg x |+| x |+| Zero |+| x |+| x
 foo : Integer -> Integer
 foo x = abstractFoo x  -- eta reduction leads to different runtime
 
-double : AdditiveGroup s => s -> s
-double x = x |+| x
 
 expBase2 : AdditiveGroup s => Nat -> s -> s
 expBase2 Z x = x
@@ -63,23 +61,25 @@ lala a b = case testOrder a b of
 
 testCarry : (x : Integer) -> String
 testCarry x = case inSymRange assertPrimLTE x 18 of
-    Just i => show $ fromInterval (snd (carry 9 (CheckLTE Oh) i M))
+    Just i => show $ fromInterval (snd (carry 9 prf i))
     Nothing => "Nothing"
-
+  where
+    prf : PrimLTE 2 9
+    prf = CheckLTE Oh
 
 minus9 : Interval PrimLTE (-9) 9
 minus9 = Between (-9) (CheckLTE Oh) (CheckLTE Oh)
 
-brol : (Carry, SymRange PrimLTE 9) -> (Carry, SymRange PrimLTE 9)
-brol (c, x) =
-    let z = addInRange x minus9
-    in carry 9 (CheckLTE Oh) z c
-
-
-testCarry' : (x : Integer) -> String
-testCarry' x = case inSymRange assertPrimLTE x 9 of
-    Just i => show $ fromInterval (snd $ index 1000000 (iterate brol (P, i)))
-    Nothing => "Nothing"
+-- brol : (Carry, SymRange PrimLTE 9) -> (Carry, SymRange PrimLTE 9)
+-- brol (c, x) =
+--     let z = addInRange x minus9
+--     in carry 9 (CheckLTE Oh) z c
+-- 
+-- 
+-- testCarry' : (x : Integer) -> String
+-- testCarry' x = case inSymRange assertPrimLTE x 9 of
+--     Just i => show $ fromInterval (snd $ index 1000000 (iterate brol (P, i)))
+--     Nothing => "Nothing"
 
 
 bigNat : Nat
@@ -92,5 +92,5 @@ castBigNat = nat bigNat
 main : IO ()
 main = do putStrLn $ show (castBigNat |+| castBigNat)
           x <- getLine
-          putStrLn $ testCarry' (cast x)
+          putStrLn $ testCarry (cast x)
 

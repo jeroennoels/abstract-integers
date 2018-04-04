@@ -13,13 +13,12 @@ import public AbstractInteger.EmbedNat
 
 semiRangeToSymRange : PartiallyOrderedAdditiveGroup s rel =>
     .rel b a -> Interval rel (neg a) b -> SymRange rel a
-semiRangeToSymRange {rel} {a} {b} ba (Between x pp qq) =
+semiRangeToSymRange {a} {b} ba (Between x pp qq) =
     Between x pp (transitive x b a qq ba)
 
 
 public export
 data Carry = M | O | P
-
 
 onePlusCarry : IntegerDomain s loe => Carry -> Interval loe (nat 0) (nat 2)
 onePlusCarry M = natInterval 0
@@ -35,20 +34,30 @@ rewriteInterval {u} {b} (Between x lo hi) = Between x
     (rewrite sym (plusInversePlusL b u) in hi)
 
 
-rewriteIntervalBis : IntegerDomain s loe =>
-    Interval loe (a |+| nat 0) b -> Interval loe a b
-rewriteIntervalBis {s} {a} (Between x p q) = Between x
-    (rewrite sym (plusNatZ a) in p) q
+rewriteIntervalBis : PartiallyOrderedAdditiveGroup s loe =>
+    Interval loe (neg a |+| b) c -> Interval loe (neg (a |+| neg b)) c
+rewriteIntervalBis {a} {b} (Between x p q) =
+    Between x (rewrite negatePlusNegate a b in p) q
+
+
+decr : IntegerDomain s loe => s -> s
+decr a = a |+| neg One
+
+
+lemma : IntegerDomain s loe => .loe (nat 2) u -> loe One (decr u)
+lemma {loe} {u} prf = rewriteRelation loe embedNatTwoMinusOne Refl o1
+   where
+    o1 : loe (nat 2 |+| neg One) (u |+| neg One)
+    o1 = translateOrderR (nat 2) u (neg One) prf
 
 
 carry : IntegerDomain s loe => (u : s) -> .loe (nat 2) u ->
-    SymRange loe (u |+| u) -> Carry -> (Carry, SymRange loe u)
-carry u moreThanTwo x c =
+    SymRange loe (u |+| u) -> (Carry, SymRange loe (decr u))
+carry u prf x =
   case splitIntervalL (neg u) x of
-    Left y => let y1 = shiftInterval u y
-                  y2 = plusOnIntervals y1 (onePlusCarry c)
-                  y3 = rewriteIntervalBis (rewriteInterval y2)
-              in (M, semiRangeToSymRange moreThanTwo y3)
+    Left y => let sy = shiftInterval One $ shiftInterval u y
+                  ry = rewriteIntervalBis $ rewriteInterval sy
+              in (M, semiRangeToSymRange (lemma {u} prf) ry)
     Right y =>
       case splitIntervalR u y of
         Left z => ?middle
